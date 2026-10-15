@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Inventory & Stock Management | CampusCanteen</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .stock-progress {
+            height: 6px;
+            border-radius: 3px;
+        }
+        .metric-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+        }
+        .metric-card.active-filter {
+            border: 2px solid var(--bs-primary) !important;
+        }
+        .quick-chip {
+            cursor: pointer;
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 12px;
+            transition: all 0.15s ease;
+        }
+        .quick-chip:hover {
+            background-color: var(--bs-primary);
+            color: #fff !important;
+            border-color: var(--bs-primary) !important;
+        }
+        .status-badge-pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .pulse-danger {
+            background-color: #dc3545;
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+            animation: pulse-red 1.8s infinite;
+        }
+        .pulse-warning {
+            background-color: #ffc107;
+            box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+            animation: pulse-yellow 1.8s infinite;
+        }
+        .pulse-success {
+            background-color: #198754;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 7px rgba(220, 53, 69, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        @keyframes pulse-yellow {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 7px rgba(255, 193, 7, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+        }
+    </style>
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top bg-surface border-bottom shadow-sm">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                <div class="text-gold fs-4 d-flex align-items-center">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div>
+                    <div class="lh-1">
+                        <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Canteen</span>
+                    </div>
+                    <small class="text-muted d-block" style="font-size: 10px; font-weight: 500;">Staff Counter Portal</small>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#staffNav">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="staffNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="dashboard.html"><i class="bi bi-kanban me-1"></i> Order Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="payments.html"><i class="bi bi-credit-card-2-front me-1"></i> Payment Queue</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold text-primary" href="inventory.html"><i class="bi bi-box-seam me-1"></i> Inventory Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="menu-management.html"><i class="bi bi-calendar2-check me-1"></i> Today's Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="food-management.html"><i class="bi bi-egg-fried me-1"></i> Dishes & Counters</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="bills.html"><i class="bi bi-receipt me-1"></i> Bills Lookup</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="feedback.html"><i class="bi bi-star me-1"></i> Feedback</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <button id="themeToggleBtn" class="btn btn-icon btn-outline-secondary" type="button" title="Toggle Theme">
+                        <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+                    <div class="dropdown ms-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-badge-fill fs-5 text-warning"></i>
+                            <span id="navUserName" class="fw-semibold d-none d-md-inline">Staff Operator</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><span class="dropdown-item-text text-muted small" id="navUserRole">Staff</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="navLogoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container-fluid px-lg-4 py-4" style="max-width: 1320px;">
+        <!-- Header Banner -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <h3 class="fw-bold mb-0">Live Inventory & Real-Time Stock Control</h3>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fs-xs px-2 py-1">
+                        <i class="bi bi-shield-check me-1"></i>Pessimistic Write Protected
+                    </span>
+                </div>
+                <p class="text-muted fs-sm mb-0">
+                    Concurrency protected with database locking. Stock drops automatically upon student order confirmation.
+                </p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="form-check form-switch d-flex align-items-center gap-2 mb-0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="autoRefreshSwitch" checked>
+                    <label class="form-check-label fs-xs text-muted fw-semibold" for="autoRefreshSwitch">Auto-Sync (15s)</label>
+                </div>
+                <button class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm d-flex align-items-center gap-1" id="btnRefreshInventory">
+                    <i class="bi bi-arrow-clockwise" id="refreshSpinner"></i>
+                    <span>Refresh Stock</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 bg-surface p-3 metric-card active-filter" id="cardFilterAll" data-filter="ALL">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="text-muted fs-xs fw-semibold text-uppercase">Tracked Items</span>
+                        <div class="p-2 rounded-3 bg-primary-subtle text-primary">
+                            <i class="bi bi-boxes fs-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="fw-bold mb-1" id="kpiTotalItems">0</h3>
+                    <div class="d-flex align-items-center text-muted fs-xs">
+                        <span>Total canteen menu items</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 bg-surface p-3 metric-card" id="cardFilterAvailable" data-filter="AVAILABLE">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="text-muted fs-xs fw-semibold text-uppercase">In Stock</span>
+                        <div class="p-2 rounded-3 bg-success-subtle text-success">
+                            <i class="bi bi-check2-circle fs-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="fw-bold text-success mb-1" id="kpiInStock">0</h3>
+                    <div class="d-flex align-items-center text-success fs-xs">
+                        <span>Adequate stock level</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 bg-surface p-3 metric-card" id="cardFilterLow" data-filter="LOW_STOCK">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="text-muted fs-xs fw-semibold text-uppercase">Low Stock Alert</span>
+                        <div class="p-2 rounded-3 bg-warning-subtle text-warning">
+                            <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="fw-bold text-warning mb-1" id="kpiLowStock">0</h3>
+                    <div class="d-flex align-items-center text-warning fs-xs fw-semibold">
+                        <span>At or below minimum threshold</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 bg-surface p-3 metric-card" id="cardFilterOut" data-filter="OUT_OF_STOCK">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="text-muted fs-xs fw-semibold text-uppercase">Sold Out</span>
+                        <div class="p-2 rounded-3 bg-danger-subtle text-danger">
+                            <i class="bi bi-x-octagon-fill fs-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="fw-bold text-danger mb-1" id="kpiSoldOut">0</h3>
+                    <div class="d-flex align-items-center text-danger fs-xs fw-semibold">
+                        <span>Zero units remaining (Orders blocked)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters & Search Toolbar -->
+        <div class="card border-0 shadow-sm rounded-4 bg-surface p-3 mb-4">
+            <div class="row g-2 align-items-center">
+                <div class="col-12 col-md-4">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" id="inventorySearch" class="form-control border-start-0 ps-0" placeholder="Search by dish name, category, or counter...">
+                    </div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <select id="filterCategory" class="form-select form-select-sm">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-3">
+                    <select id="filterCounter" class="form-select form-select-sm">
+                        <option value="">All Counters</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-2">
+                    <select id="filterStatus" class="form-select form-select-sm">
+                        <option value="ALL">All Statuses</option>
+                        <option value="AVAILABLE">In Stock Only</option>
+                        <option value="LOW_STOCK">Low Stock Alerts</option>
+                        <option value="OUT_OF_STOCK">Sold Out Only</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-1 text-end">
+                    <button class="btn btn-outline-secondary btn-sm w-100" id="btnResetFilters" title="Reset Filters">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Table -->
+        <div class="card border-0 shadow-sm rounded-4 bg-surface overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light fs-xs text-uppercase text-muted border-bottom">
+                        <tr>
+                            <th class="ps-4" style="min-width: 240px;">Food Item</th>
+                            <th style="min-width: 140px;">Category</th>
+                            <th style="min-width: 180px;">Counter</th>
+                            <th style="min-width: 140px;">Status</th>
+                            <th style="min-width: 180px;">Stock Level</th>
+                            <th style="min-width: 130px;">Last Restocked</th>
+                            <th class="text-end pe-4" style="min-width: 280px;">Stock Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+                                <div class="fs-sm">Connecting to Campus Inventory Service...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Table Footer Summary -->
+            <div class="card-footer bg-surface border-top px-4 py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <small class="text-muted" id="tableSummaryText">Showing all inventory records</small>
+                <div class="d-flex align-items-center gap-3">
+                    <small class="text-muted"><i class="bi bi-clock-history me-1"></i>Last updated: <span id="lastUpdatedTime" class="fw-medium">--</span></small>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Direct Stock Level & Threshold Adjustment -->
+    <div class="modal fade" id="modalAdjustStock" tabindex="-1" aria-labelledby="modalAdjustStockLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold" id="modalAdjustStockLabel">
+                        <i class="bi bi-sliders text-primary me-2"></i>Adjust Stock Level
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="p-3 rounded-3 bg-body-tertiary mb-3">
+                        <div class="fw-bold fs-6 mb-1" id="modalItemName">--</div>
+                        <div class="d-flex align-items-center gap-2 text-muted fs-xs">
+                            <span id="modalItemCategory">--</span>
+                            <span>&bull;</span>
+                            <span id="modalItemCounter">--</span>
+                            <span>&bull;</span>
+                            <span class="fw-semibold text-primary" id="modalItemPrice">₹0.00</span>
+                        </div>
+                    </div>
+
+                    <form id="formAdjustStock">
+                        <input type="hidden" id="adjustFoodItemId">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold fs-sm">Exact Stock Level (Units)</label>
+                            <div class="input-group">
+                                <button class="btn btn-outline-secondary" type="button" id="btnModalStockMinus"><i class="bi bi-dash"></i></button>
+                                <input type="number" class="form-control text-center fw-bold fs-5" id="adjustCurrentStock" min="0" max="9999" required>
+                                <button class="btn btn-outline-secondary" type="button" id="btnModalStockPlus"><i class="bi bi-plus"></i></button>
+                            </div>
+                            <small class="text-muted fs-xs">Set to 0 to mark the item as SOLD OUT immediately.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold fs-sm">Low Stock Alert Threshold</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-bell"></i></span>
+                                <input type="number" class="form-control" id="adjustMinimumThreshold" min="1" max="500" required>
+                            </div>
+                            <small class="text-muted fs-xs">When remaining stock reaches this level, a yellow alert triggers for kitchen staff.</small>
+                        </div>
+
+                        <div class="alert alert-info border-0 rounded-3 fs-xs mb-0 d-flex gap-2">
+                            <i class="bi bi-info-circle-fill fs-6 flex-shrink-0"></i>
+                            <div>
+                                Updates are committed immediately with database row-level locking. Changes reflect live on student order screens.
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-4" id="btnSaveStockAdjust">
+                        <i class="bi bi-check2 me-1"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Page Logic Script -->
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from '../js/config.js';
+        import { ApiService } from '../js/api.js';
+        import { AuthGuard } from '../js/auth.js';
+        import { UI } from '../js/ui.js';
+        import { initChatbot } from '../js/chatbot.js';
+
+        // 1. Guard Staff and Manager roles
+        const currentUser = AuthGuard.requireRole([CONFIG.ROLES.STAFF, CONFIG.ROLES.MANAGER]);
+        if (!currentUser) throw new Error("Unauthorized");
+
+        AuthGuard.setupNavbar();
+        UI.initTheme();
+        initChatbot();
+
+        // 2. DOM Elements
+        const tableBody = document.getElementById('inventoryTableBody');
+        const searchInput = document.getElementById('inventorySearch');
+        const filterCategory = document.getElementById('filterCategory');
+        const filterCounter = document.getElementById('filterCounter');
+        const filterStatus = document.getElementById('filterStatus');
+        const btnResetFilters = document.getElementById('btnResetFilters');
+        const btnRefresh = document.getElementById('btnRefreshInventory');
+        const refreshSpinner = document.getElementById('refreshSpinner');
+        const autoRefreshSwitch = document.getElementById('autoRefreshSwitch');
+        const tableSummaryText = document.getElementById('tableSummaryText');
+        const lastUpdatedTime = document.getElementById('lastUpdatedTime');
+
+        // KPI cards
+        const kpiTotalItems = document.getElementById('kpiTotalItems');
+        const kpiInStock = document.getElementById('kpiInStock');
+        const kpiLowStock = document.getElementById('kpiLowStock');
+        const kpiSoldOut = document.getElementById('kpiSoldOut');
+        const metricCards = document.querySelectorAll('.metric-card');
+
+        // Modal Elements
+        const modalEl = document.getElementById('modalAdjustStock');
+        const modalInstance = new bootstrap.Modal(modalEl);
+        const modalItemName = document.getElementById('modalItemName');
+        const modalItemCategory = document.getElementById('modalItemCategory');
+        const modalItemCounter = document.getElementById('modalItemCounter');
+        const modalItemPrice = document.getElementById('modalItemPrice');
+        const adjustFoodItemId = document.getElementById('adjustFoodItemId');
+        const adjustCurrentStock = document.getElementById('adjustCurrentStock');
+        const adjustMinimumThreshold = document.getElementById('adjustMinimumThreshold');
+        const btnSaveStockAdjust = document.getElementById('btnSaveStockAdjust');
+        const btnModalStockMinus = document.getElementById('btnModalStockMinus');
+        const btnModalStockPlus = document.getElementById('btnModalStockPlus');
+
+        // 3. Application State
+        let allInventoryItems = [];
+        let autoSyncInterval = null;
+
+        /**
+         * Load all inventory from backend API
+         */
+        async function loadInventory(isSilent = false) {
+            if (!isSilent) {
+                refreshSpinner.classList.add('spin-animation');
+                btnRefresh.disabled = true;
+            }
+
+            try {
+                const response = await ApiService.get(ENDPOINTS.STAFF_INVENTORY);
+                // Unwrapped data is array of Inventory entities
+                allInventoryItems = Array.isArray(response) ? response : (response?.data || []);
+
+                updateKPIs(allInventoryItems);
+                populateFilterDropdowns(allInventoryItems);
+                renderInventoryTable();
+
+                const now = new Date();
+                lastUpdatedTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            } catch (err) {
+                console.error("Failed to fetch inventory:", err);
+                if (!isSilent) {
+                    UI.showToast(err.message || "Failed to load inventory stock", "danger");
+                }
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-danger">
+                            <i class="bi bi-exclamation-triangle-fill fs-3 d-block mb-2"></i>
+                            <div class="fw-semibold">Error Loading Inventory</div>
+                            <div class="fs-xs text-muted mb-3">${err.message || 'Server communication error'}</div>
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="location.reload()">
+                                <i class="bi bi-arrow-clockwise me-1"></i> Try Again
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            } finally {
+                if (!isSilent) {
+                    refreshSpinner.classList.remove('spin-animation');
+                    btnRefresh.disabled = false;
+                }
+            }
+        }
+
+        /**
+         * Update KPI metrics cards
+         */
+        function updateKPIs(items) {
+            let total = items.length;
+            let inStock = 0;
+            let lowStock = 0;
+            let soldOut = 0;
+
+            items.forEach(item => {
+                const stock = item.currentStock;
+                const threshold = item.minimumThreshold;
+
+                if (stock <= 0) {
+                    soldOut++;
+                } else if (stock <= threshold) {
+                    lowStock++;
+                } else {
+                    inStock++;
+                }
+            });
+
+            kpiTotalItems.textContent = total;
+            kpiInStock.textContent = inStock;
+            kpiLowStock.textContent = lowStock;
+            kpiSoldOut.textContent = soldOut;
+        }
+
+        /**
+         * Populate Category & Counter dropdowns uniquely
+         */
+        function populateFilterDropdowns(items) {
+            const currentCat = filterCategory.value;
+            const currentCnt = filterCounter.value;
+
+            const categories = new Set();
+            const counters = new Set();
+
+            items.forEach(item => {
+                if (item.foodItem?.category?.name) categories.add(item.foodItem.category.name);
+                if (item.foodItem?.counter?.name) counters.add(item.foodItem.counter.name);
+            });
+
+            // Rebuild category options
+            filterCategory.innerHTML = '<option value="">All Categories</option>' +
+                Array.from(categories).sort().map(c => `<option value="${c}" ${c === currentCat ? 'selected' : ''}>${c}</option>`).join('');
+
+            // Rebuild counter options
+            filterCounter.innerHTML = '<option value="">All Counters</option>' +
+                Array.from(counters).sort().map(c => `<option value="${c}" ${c === currentCnt ? 'selected' : ''}>${c}</option>`).join('');
+        }
+
+        /**
+         * Format ISO date string nicely
+         */
+        function formatRestockDate(isoStr) {
+            if (!isoStr) return '<span class="text-muted fs-xs">Not recorded</span>';
+            try {
+                const d = new Date(isoStr);
+                const isToday = new Date().toDateString() === d.toDateString();
+                const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                if (isToday) {
+                    return `<span class="fw-medium fs-xs">Today, ${timeStr}</span>`;
+                }
+                return `<span class="fs-xs">${d.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${timeStr}</span>`;
+            } catch (e) {
+                return '<span class="text-muted fs-xs">--</span>';
+            }
+        }
+
+        /**
+         * Render filtered table rows
+         */
+        function renderInventoryTable() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedCat = filterCategory.value;
+            const selectedCnt = filterCounter.value;
+            const selectedStatus = filterStatus.value;
+
+            const filtered = allInventoryItems.filter(item => {
+                const fi = item.foodItem || {};
+                const nameMatch = !query ||
+                    (fi.name && fi.name.toLowerCase().includes(query)) ||
+                    (fi.category?.name && fi.category.name.toLowerCase().includes(query)) ||
+                    (fi.counter?.name && fi.counter.name.toLowerCase().includes(query));
+
+                const catMatch = !selectedCat || (fi.category?.name === selectedCat);
+                const cntMatch = !selectedCnt || (fi.counter?.name === selectedCnt);
+
+                let statusMatch = true;
+                const stock = item.currentStock;
+                const threshold = item.minimumThreshold;
+
+                if (selectedStatus === 'AVAILABLE') {
+                    statusMatch = stock > threshold;
+                } else if (selectedStatus === 'LOW_STOCK') {
+                    statusMatch = stock > 0 && stock <= threshold;
+                } else if (selectedStatus === 'OUT_OF_STOCK') {
+                    statusMatch = stock <= 0;
+                }
+
+                return nameMatch && catMatch && cntMatch && statusMatch;
+            });
+
+            tableSummaryText.textContent = `Showing ${filtered.length} of ${allInventoryItems.length} inventory records`;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="bi bi-search fs-3 d-block mb-2 text-secondary"></i>
+                            <div class="fw-semibold">No matching inventory items found</div>
+                            <div class="fs-xs text-muted">Try clearing the search query or adjusting your filters.</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map(item => {
+                const fi = item.foodItem || {};
+                const stock = item.currentStock;
+                const threshold = item.minimumThreshold;
+                const isVeg = fi.vegetarian !== false;
+
+                // Status classification
+                let statusBadge = '';
+                let progressColor = 'bg-success';
+                let progressPercent = Math.min(100, Math.round((stock / Math.max(stock, threshold * 2.5)) * 100));
+
+                if (stock <= 0) {
+                    statusBadge = `
+                        <span class="badge bg-danger text-white rounded-pill px-2 py-1 fs-xs d-inline-flex align-items-center">
+                            <span class="status-badge-pulse pulse-danger"></span> SOLD OUT
+                        </span>
+                    `;
+                    progressColor = 'bg-danger';
+                    progressPercent = 0;
+                } else if (stock <= threshold) {
+                    statusBadge = `
+                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-2 py-1 fs-xs d-inline-flex align-items-center">
+                            <span class="status-badge-pulse pulse-warning"></span> Low Stock (&le;${threshold})
+                        </span>
+                    `;
+                    progressColor = 'bg-warning';
+                } else {
+                    statusBadge = `
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1 fs-xs d-inline-flex align-items-center">
+                            <span class="status-badge-pulse pulse-success"></span> In Stock
+                        </span>
+                    `;
+                    progressColor = 'bg-success';
+                }
+
+                const priceFormatted = Number(fi.price || 0).toFixed(2);
+                const categoryName = fi.category?.name || 'Uncategorized';
+                const counterName = fi.counter?.name || 'General Counter';
+
+                return `
+                    <tr data-item-id="${fi.id}">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge ${isVeg ? 'border-success text-success' : 'border-danger text-danger'} border px-1 py-0 fs-xxs" title="${isVeg ? 'Vegetarian' : 'Non-Vegetarian'}">
+                                    <i class="bi bi-circle-fill"></i>
+                                </span>
+                                <div>
+                                    <div class="fw-bold text-dark lh-sm">${fi.name || 'Unnamed Item'}</div>
+                                    <div class="d-flex align-items-center gap-2 text-muted fs-xxs mt-1">
+                                        <span>ID: #${fi.id}</span>
+                                        <span>&bull;</span>
+                                        <span class="fw-semibold text-primary">₹${priceFormatted}</span>
+                                        ${fi.available === false ? '<span class="badge bg-secondary-subtle text-secondary px-1">Inactive</span>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary-subtle text-secondary fs-xs fw-medium rounded-pill px-2 py-1">
+                                ${categoryName}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border fs-xs fw-medium rounded-pill px-2 py-1">
+                                <i class="bi bi-geo-alt me-1 text-primary"></i>${counterName}
+                            </span>
+                        </td>
+                        <td>
+                            ${statusBadge}
+                        </td>
+                        <td>
+                            <div style="min-width: 140px;">
+                                <div class="d-flex justify-content-between align-items-baseline mb-1">
+                                    <div>
+                                        <span class="fw-extrabold fs-6 ${stock <= 0 ? 'text-danger' : (stock <= threshold ? 'text-warning' : 'text-dark')}">${stock}</span>
+                                        <span class="text-muted fs-xs"> units</span>
+                                    </div>
+                                    <small class="text-muted fs-xxs">Min Alert: ${threshold}</small>
+                                </div>
+                                <div class="progress stock-progress bg-secondary-subtle">
+                                    <div class="progress-bar ${progressColor}" role="progressbar" style="width: ${progressPercent}%" aria-valuenow="${stock}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            ${formatRestockDate(item.lastRestockedAt)}
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="d-inline-flex align-items-center gap-2">
+                                <!-- Quick Restock Chips -->
+                                <div class="d-none d-xl-flex gap-1">
+                                    <span class="badge border border-secondary text-secondary quick-chip btn-quick-chip" data-id="${fi.id}" data-qty="5">+5</span>
+                                    <span class="badge border border-secondary text-secondary quick-chip btn-quick-chip" data-id="${fi.id}" data-qty="10">+10</span>
+                                    <span class="badge border border-secondary text-secondary quick-chip btn-quick-chip" data-id="${fi.id}" data-qty="25">+25</span>
+                                </div>
+
+                                <!-- Input & Restock Action -->
+                                <div class="input-group input-group-sm" style="width: 140px;">
+                                    <input type="number" class="form-control text-center restock-qty-input" min="1" max="999" value="10" data-id="${fi.id}" title="Quantity to add">
+                                    <button class="btn btn-primary fw-semibold btn-restock-submit" data-id="${fi.id}" title="Restock item">
+                                        <i class="bi bi-plus-lg"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Direct Edit Modal Trigger -->
+                                <button class="btn btn-outline-secondary btn-sm btn-edit-stock" data-id="${fi.id}" title="Direct stock adjustment">
+                                    <i class="bi bi-sliders"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            bindRowActionEvents();
+        }
+
+        /**
+         * Bind dynamic button click handlers on the rendered table
+         */
+        function bindRowActionEvents() {
+            // 1. Quick Chips (+5, +10, +25)
+            document.querySelectorAll('.btn-quick-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const id = chip.dataset.id;
+                    const qty = Number(chip.dataset.qty);
+                    const input = document.querySelector(`.restock-qty-input[data-id="${id}"]`);
+                    if (input) {
+                        input.value = qty;
+                        // Trigger restock immediately
+                        executeRestock(Number(id), qty);
+                    }
+                });
+            });
+
+            // 2. Restock submit button
+            document.querySelectorAll('.btn-restock-submit').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    const input = document.querySelector(`.restock-qty-input[data-id="${id}"]`);
+                    const addQty = Number(input?.value) || 0;
+
+                    if (addQty <= 0) {
+                        UI.showToast("Please enter a positive quantity to restock", "warning");
+                        input?.focus();
+                        return;
+                    }
+
+                    executeRestock(id, addQty, btn);
+                });
+            });
+
+            // 3. Edit Stock & Threshold button
+            document.querySelectorAll('.btn-edit-stock').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    openAdjustModal(id);
+                });
+            });
+        }
+
+        /**
+         * Call PUT /api/staff/inventory/{id}/restock
+         */
+        async function executeRestock(foodItemId, quantity, btnElement = null) {
+            if (btnElement) {
+                btnElement.disabled = true;
+                btnElement.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
+            }
+
+            try {
+                // Endpoint expects PUT with body: { quantity: number }
+                await ApiService.put(ENDPOINTS.STAFF_INVENTORY_RESTOCK(foodItemId), {
+                    quantity: quantity
+                });
+
+                UI.showToast(`Restocked +${quantity} units successfully!`, "success");
+                // Reload data silently to update UI smoothly
+                await loadInventory(true);
+            } catch (err) {
+                console.error("Restock error:", err);
+                UI.showToast(err.message || "Failed to restock item", "danger");
+            } finally {
+                if (btnElement) {
+                    btnElement.disabled = false;
+                    btnElement.innerHTML = '<i class="bi bi-plus-lg"></i>';
+                }
+            }
+        }
+
+        /**
+         * Open Adjustment Modal for exact stock & threshold
+         */
+        function openAdjustModal(foodItemId) {
+            const item = allInventoryItems.find(it => it.foodItem?.id === foodItemId);
+            if (!item) return;
+
+            const fi = item.foodItem || {};
+            adjustFoodItemId.value = fi.id;
+            modalItemName.textContent = fi.name || `Food Item #${fi.id}`;
+            modalItemCategory.textContent = fi.category?.name || 'General';
+            modalItemCounter.textContent = fi.counter?.name || 'Main Counter';
+            modalItemPrice.textContent = `₹${Number(fi.price || 0).toFixed(2)}`;
+
+            adjustCurrentStock.value = item.currentStock;
+            adjustMinimumThreshold.value = item.minimumThreshold;
+
+            modalInstance.show();
+        }
+
+        // Stepper buttons inside modal
+        btnModalStockMinus.addEventListener('click', () => {
+            const current = Number(adjustCurrentStock.value) || 0;
+            if (current > 0) adjustCurrentStock.value = current - 1;
+        });
+
+        btnModalStockPlus.addEventListener('click', () => {
+            const current = Number(adjustCurrentStock.value) || 0;
+            adjustCurrentStock.value = current + 1;
+        });
+
+        /**
+         * Save direct adjustment via PUT /api/staff/inventory/{id}/update
+         */
+        btnSaveStockAdjust.addEventListener('click', async () => {
+            const foodItemId = Number(adjustFoodItemId.value);
+            const newStock = Number(adjustCurrentStock.value);
+            const newThreshold = Number(adjustMinimumThreshold.value);
+
+            if (isNaN(newStock) || newStock < 0) {
+                UI.showToast("Stock level must be 0 or a positive number", "warning");
+                adjustCurrentStock.focus();
+                return;
+            }
+
+            if (isNaN(newThreshold) || newThreshold < 1) {
+                UI.showToast("Alert threshold must be at least 1 unit", "warning");
+                adjustMinimumThreshold.focus();
+                return;
+            }
+
+            btnSaveStockAdjust.disabled = true;
+            btnSaveStockAdjust.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...';
+
+            try {
+                // Endpoint expects PUT with body: { currentStock: number, minimumThreshold: number }
+                await ApiService.put(ENDPOINTS.STAFF_INVENTORY_UPDATE(foodItemId), {
+                    currentStock: newStock,
+                    minimumThreshold: newThreshold
+                });
+
+                modalInstance.hide();
+                UI.showToast("Inventory stock and threshold updated!", "success");
+                await loadInventory(true);
+            } catch (err) {
+                console.error("Adjustment error:", err);
+                UI.showToast(err.message || "Failed to update inventory", "danger");
+            } finally {
+                btnSaveStockAdjust.disabled = false;
+                btnSaveStockAdjust.innerHTML = '<i class="bi bi-check2 me-1"></i>Save Changes';
+            }
+        });
+
+        // 4. Filter and Search Event Listeners
+        searchInput.addEventListener('input', renderInventoryTable);
+        filterCategory.addEventListener('change', renderInventoryTable);
+        filterCounter.addEventListener('change', renderInventoryTable);
+        filterStatus.addEventListener('change', () => {
+            syncMetricCardSelection(filterStatus.value);
+            renderInventoryTable();
+        });
+
+        btnResetFilters.addEventListener('click', () => {
+            searchInput.value = '';
+            filterCategory.value = '';
+            filterCounter.value = '';
+            filterStatus.value = 'ALL';
+            syncMetricCardSelection('ALL');
+            renderInventoryTable();
+        });
+
+        // Metric Card Click Quick-Filters
+        metricCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const targetFilter = card.dataset.filter;
+                filterStatus.value = targetFilter;
+                syncMetricCardSelection(targetFilter);
+                renderInventoryTable();
+            });
+        });
+
+        function syncMetricCardSelection(filterVal) {
+            metricCards.forEach(c => {
+                if (c.dataset.filter === filterVal) {
+                    c.classList.add('active-filter');
+                } else {
+                    c.classList.remove('active-filter');
+                }
+            });
+        }
+
+        // Manual Refresh Button
+        btnRefresh.addEventListener('click', () => loadInventory(false));
+
+        // Auto-refresh interval (15 seconds)
+        function setupAutoRefresh() {
+            if (autoSyncInterval) clearInterval(autoSyncInterval);
+            if (autoRefreshSwitch.checked) {
+                autoSyncInterval = setInterval(() => {
+                    loadInventory(true);
+                }, 15000);
+            }
+        }
+
+        autoRefreshSwitch.addEventListener('change', setupAutoRefresh);
+
+        // 5. Initial Load
+        loadInventory(false);
+        setupAutoRefresh();
+    </script>
+</body>
+</html>

@@ -1,0 +1,732 @@
+/* ==========================================================================
+   CampusCanteen - Modern Smart Canteen Management System
+   Warm Amber, Gold & Cream Theme Design System
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+:root {
+    --primary-color: #f59e0b;
+    --primary-hover: #d97706;
+    --primary-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --bg-gradient-primary: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+    --secondary-color: #0f382a;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #06b6d4;
+    
+    --bg-body: #fffdf7;
+    --bg-surface: #ffffff;
+    --bg-card: #ffffff;
+    --bg-glass: rgba(255, 255, 255, 0.92);
+    --border-color: #f1e8d9;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+}
+
+[data-bs-theme="dark"] {
+    --bg-body: #0b0f19;
+    --bg-surface: #111827;
+    --bg-card: #1e293b;
+    --bg-glass: rgba(30, 41, 59, 0.85);
+    --border-color: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Warm Theme Bootstrap Overrides */
+.btn-primary {
+    background-color: #f59e0b !important;
+    border-color: #f59e0b !important;
+    color: #ffffff !important;
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: #d97706 !important;
+    border-color: #d97706 !important;
+    color: #ffffff !important;
+}
+.btn-outline-primary {
+    color: #d97706 !important;
+    border-color: #f59e0b !important;
+}
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active {
+    background-color: #f59e0b !important;
+    border-color: #f59e0b !important;
+    color: #ffffff !important;
+}
+.text-primary {
+    color: #d97706 !important;
+}
+.bg-primary {
+    background-color: #f59e0b !important;
+    color: #ffffff !important;
+}
+.bg-primary-subtle {
+    background-color: #fef3c7 !important;
+    color: #b45309 !important;
+}
+.badge.bg-primary {
+    background-color: #f59e0b !important;
+    color: #ffffff !important;
+}
+.badge.bg-primary-subtle {
+    background-color: #fef3c7 !important;
+    color: #b45309 !important;
+    border-color: #fde68a !important;
+}
+.bg-gradient-primary {
+    background: var(--bg-gradient-primary) !important;
+}
+
+main {
+    flex: 1;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Navbar */
+.navbar-custom {
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    padding: 0.75rem 1rem;
+}
+
+.brand-text {
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+/* Veg / Non-Veg Icons */
+.veg-badge, .non-veg-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    border-width: 1.5px;
+    border-style: solid;
+    padding: 2px;
+}
+
+.veg-badge {
+    border-color: #10b981;
+}
+
+.veg-badge::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10b981;
+}
+
+.non-veg-badge {
+    border-color: #ef4444;
+}
+
+.non-veg-badge::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 8px solid #ef4444;
+}
+
+/* Menu Item Card */
+.menu-card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    overflow: hidden;
+    transition: all 0.25s ease-in-out;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(37, 99, 235, 0.3);
+}
+
+.menu-card.sold-out {
+    opacity: 0.7;
+    filter: grayscale(40%);
+}
+
+.menu-card-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-card-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Counter Badge */
+.counter-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Timeline Tracking */
+.order-timeline {
+    position: relative;
+    padding: 1.5rem 0;
+}
+
+.timeline-step {
+    position: relative;
+    padding-bottom: 1.5rem;
+    padding-left: 2.5rem;
+}
+
+.timeline-step::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 24px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+}
+
+.timeline-step:last-child::before {
+    display: none;
+}
+
+.timeline-step .timeline-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.timeline-step.completed::before {
+    background: var(--success-color);
+}
+
+.timeline-step.completed .timeline-icon {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    color: #ffffff;
+}
+
+.timeline-step.active .timeline-icon {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+/* AI Chatbot Widget */
+.chatbot-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1050;
+}
+
+.chatbot-btn {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: #ffffff;
+    border: none;
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chatbot-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.4);
+}
+
+.chatbot-panel {
+    display: none;
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 375px;
+    height: 530px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.25s ease-out forwards;
+}
+
+.chatbot-panel.open {
+    display: flex;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chatbot-header {
+    background: var(--primary-gradient);
+    color: #ffffff;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: var(--bg-body);
+}
+
+.chat-bubble {
+    max-width: 82%;
+    padding: 0.65rem 0.95rem;
+    border-radius: var(--radius-lg);
+    font-size: 0.88rem;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.chat-bubble.bot {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.chat-bubble.user {
+    background: var(--primary-color);
+    color: #ffffff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.quick-reply-chip {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 20px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.quick-reply-chip:hover {
+    background: var(--primary-color);
+    color: #ffffff;
+}
+
+/* UPI Countdown Timer Box */
+.countdown-box {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%);
+    border: 1px dashed rgba(239, 68, 68, 0.4);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: #dc2626;
+}
+
+/* Rating Stars */
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    gap: 4px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 1.75rem;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #f59e0b;
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-surface);
+    padding: 1.5rem 0;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   CampusCanteen Specialized Design Tokens (Inspired by reference UI)
+   ========================================================================== */
+
+.font-handwriting {
+    font-family: 'Caveat', cursive;
+}
+
+.text-gold {
+    color: #f59e0b !important;
+}
+
+.bg-gold {
+    background-color: #f59e0b !important;
+}
+
+.bg-cream {
+    background-color: #fffdf7 !important;
+}
+
+.btn-gold {
+    background-color: #f59e0b;
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.35);
+    transition: all 0.2s ease;
+}
+
+.btn-gold:hover {
+    background-color: #d97706;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px 0 rgba(245, 158, 11, 0.45);
+}
+
+.btn-outline-gold {
+    border: 1.5px solid #f59e0b;
+    color: #f59e0b;
+    background: transparent;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-gold:hover {
+    background-color: #f59e0b;
+    color: #ffffff;
+}
+
+.nav-link-campus {
+    color: #475569;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.nav-link-campus:hover,
+.nav-link-campus.active {
+    color: #f59e0b;
+}
+
+.nav-link-campus.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 1rem;
+    right: 1rem;
+    height: 3px;
+    background-color: #f59e0b;
+    border-radius: 2px;
+}
+
+/* Hero Section Styles */
+.hero-campus {
+    background: #fffcf4;
+    overflow: hidden;
+    position: relative;
+}
+
+.hero-sunburst {
+    position: absolute;
+    right: -100px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 650px;
+    height: 650px;
+    background: radial-gradient(circle, rgba(254, 240, 199, 0.9) 0%, rgba(251, 191, 36, 0.45) 55%, rgba(255, 255, 255, 0) 72%);
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-watermark-vertical {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: 0.25em;
+    color: rgba(245, 158, 11, 0.22);
+    user-select: none;
+    z-index: 2;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.hero-platter-img {
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0 25px 50px -12px rgba(180, 83, 9, 0.25), 0 0 0 12px rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 3;
+    animation: float-gentle 6s ease-in-out infinite alternate;
+}
+
+@keyframes float-gentle {
+    0% { transform: translateY(0px) rotate(0deg); }
+    100% { transform: translateY(-8px) rotate(2deg); }
+}
+
+.order-confirmed-pill {
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    z-index: 4;
+    background: #ffffff;
+    border-radius: 50px;
+    padding: 8px 18px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    animation: bounce-subtle 4s ease-in-out infinite;
+}
+
+@keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+.hero-mini-card {
+    border-radius: 18px;
+    padding: 14px 18px;
+    box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+}
+
+.hero-mini-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Popular This Week Food Card */
+.popular-food-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 14px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.popular-food-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.09);
+}
+
+.popular-food-img {
+    width: 100%;
+    aspect-ratio: 16/11;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.popular-cart-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #f59e0b;
+    color: #ffffff;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.popular-cart-btn:hover {
+    background-color: #d97706;
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+/* Bottom Value Props Bar */
+.value-prop-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.value-prop-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #fef3c7;
+    color: #d97706;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+}
+
+/* Universal Food Photography Thumbnails */
+.dish-thumb-sm {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    flex-shrink: 0;
+}
+
+.dish-thumb-md {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(245, 158, 11, 0.25);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.dish-thumb-lg {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 2px solid rgba(245, 158, 11, 0.3);
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.12);
+    flex-shrink: 0;
+}
+
+/* Portal Hero Banner with Authentic Food Platter Backdrop */
+.portal-hero-banner {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.96) 0%, rgba(180, 83, 9, 0.94) 100%),
+                url('../assets/hero-food-platter.jpg') center/cover no-repeat;
+    background-blend-mode: multiply;
+    border-radius: 20px;
+    padding: 2rem 2.25rem;
+    color: #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-badge-golden {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #1f2937;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+

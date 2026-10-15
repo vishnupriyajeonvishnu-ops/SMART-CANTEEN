@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Verification Queue | CampusCanteen</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top bg-surface border-bottom shadow-sm">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                <div class="text-gold fs-4 d-flex align-items-center">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div>
+                    <div class="lh-1">
+                        <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Canteen</span>
+                    </div>
+                    <small class="text-muted d-block" style="font-size: 10px; font-weight: 500;">Staff Counter Portal</small>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#staffNav">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="staffNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="dashboard.html"><i class="bi bi-kanban me-1"></i> Order Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold" href="payments.html"><i class="bi bi-credit-card-2-front me-1"></i> Payment Queue</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="inventory.html"><i class="bi bi-box-seam me-1"></i> Inventory Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="menu-management.html"><i class="bi bi-calendar2-check me-1"></i> Today's Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="food-management.html"><i class="bi bi-egg-fried me-1"></i> Dishes & Counters</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="bills.html"><i class="bi bi-receipt me-1"></i> Bills Lookup</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="feedback.html"><i class="bi bi-star me-1"></i> Feedback</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <button id="themeToggleBtn" class="btn btn-icon btn-outline-secondary" type="button" title="Toggle Theme">
+                        <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+                    <div class="dropdown ms-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-badge-fill fs-5 text-warning"></i>
+                            <span id="navUserName" class="fw-semibold d-none d-md-inline">Staff Operator</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item text-danger" href="#" id="navLogoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container-fluid px-lg-4 py-4" style="max-width: 1200px;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div>
+                <h3 class="fw-bold mb-1">Canteen Payment Verification Queue</h3>
+                <p class="text-muted fs-sm mb-0">Cross-check UPI UTR references against bank notifications and collect counter cash.</p>
+            </div>
+            <button class="btn btn-outline-primary btn-sm rounded-pill px-3" id="btnRefreshPayments">
+                <i class="bi bi-arrow-clockwise me-1"></i> Refresh Queue
+            </button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <ul class="nav nav-pills mb-4 gap-2" id="paymentTabs">
+            <li class="nav-item">
+                <button class="nav-link active fw-bold" id="tabUpiBtn" data-bs-toggle="pill" data-bs-target="#tabUpi">
+                    <i class="bi bi-qr-code-scan me-1"></i> UPI / GPay Submissions
+                    <span class="badge bg-danger ms-1" id="badgeUpiCount">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-bold" id="tabCashBtn" data-bs-toggle="pill" data-bs-target="#tabCash">
+                    <i class="bi bi-cash-stack me-1"></i> Cash at Counter Pending
+                    <span class="badge bg-warning text-dark ms-1" id="badgeCashCount">0</span>
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- UPI Tab -->
+            <div class="tab-pane fade show active" id="tabUpi">
+                <div class="card border-0 shadow-sm rounded-4 bg-surface overflow-hidden">
+                    <div class="card-header bg-transparent border-bottom p-3">
+                        <span class="fw-bold fs-sm text-primary"><i class="bi bi-info-circle me-1"></i> Check your GPay / Axis UPI app or SMS for the matching 12-digit UTR before verifying.</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light fs-xs text-uppercase text-muted">
+                                <tr>
+                                    <th class="ps-4">Order ID</th>
+                                    <th>Student Details</th>
+                                    <th>Submitted UTR</th>
+                                    <th>Time</th>
+                                    <th>Amount</th>
+                                    <th class="text-end pe-4">Staff Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upiTableBody">
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Loading pending UPI submissions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cash Tab -->
+            <div class="tab-pane fade" id="tabCash">
+                <div class="card border-0 shadow-sm rounded-4 bg-surface overflow-hidden">
+                    <div class="card-header bg-transparent border-bottom p-3">
+                        <span class="fw-bold fs-sm text-warning"><i class="bi bi-cash me-1"></i> Verify that cash currency notes have been handed over at the counter register.</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light fs-xs text-uppercase text-muted">
+                                <tr>
+                                    <th class="ps-4">Order ID</th>
+                                    <th>Student Details</th>
+                                    <th>Items Ordered</th>
+                                    <th>Time</th>
+                                    <th>Amount Due</th>
+                                    <th class="text-end pe-4">Staff Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cashTableBody">
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Loading cash pending orders...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from '../js/config.js';
+        import { ApiService } from '../js/api.js';
+        import { AuthGuard } from '../js/auth.js';
+        import { UI } from '../js/ui.js';
+        import { initChatbot } from '../js/chatbot.js';
+
+        const currentUser = AuthGuard.requireRole([CONFIG.ROLES.STAFF, CONFIG.ROLES.MANAGER]);
+        if (!currentUser) throw new Error("Unauthorized");
+
+        AuthGuard.setupNavbar();
+        UI.initTheme();
+        initChatbot();
+
+        const upiTableBody = document.getElementById('upiTableBody');
+        const cashTableBody = document.getElementById('cashTableBody');
+        const badgeUpiCount = document.getElementById('badgeUpiCount');
+        const badgeCashCount = document.getElementById('badgeCashCount');
+        const btnRefreshPayments = document.getElementById('btnRefreshPayments');
+
+        async function loadPayments() {
+            try {
+                const res = await ApiService.get(ENDPOINTS.STAFF_PAYMENTS_PENDING);
+                const list = Array.isArray(res) ? res : (res?.data || []);
+
+                const upiList = list.filter(p => p.paymentMethod === 'GPAY_UPI' && p.paymentStatus === 'PENDING');
+                const cashList = list.filter(p => p.paymentMethod === 'CASH' && p.paymentStatus === 'CASH_PENDING');
+
+                badgeUpiCount.textContent = upiList.length;
+                badgeCashCount.textContent = cashList.length;
+
+                renderUpiList(upiList);
+                renderCashList(cashList);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderUpiList(list) {
+            if (list.length === 0) {
+                upiTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">No pending UPI submissions in queue.</td></tr>`;
+                return;
+            }
+
+            upiTableBody.innerHTML = list.map(p => `
+                <tr>
+                    <td class="ps-4">
+                        <span class="fw-bold fs-6">#${p.orderId}</span>
+                    </td>
+                    <td>
+                        <div class="fw-semibold">${p.studentName || 'Student'}</div>
+                        <small class="text-muted font-monospace fs-xxs">Reg: ${p.registerNumber || 'N/A'}</small>
+                    </td>
+                    <td>
+                        <span class="badge bg-primary-subtle text-primary border font-monospace fs-sm px-2 py-1">
+                            ${p.utrNumber || '<span class="text-danger">Awaiting submission</span>'}
+                        </span>
+                    </td>
+                    <td><small class="text-muted">${UI.formatDate(p.createdAt)}</small></td>
+                    <td><span class="fw-extrabold text-primary fs-6">${UI.formatCurrency(p.amount)}</span></td>
+                    <td class="text-end pe-4">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-success fw-bold btn-verify-pay" data-id="${p.id}" ${!p.utrNumber ? 'disabled title="Awaiting student UTR"' : ''}>
+                                <i class="bi bi-check-lg me-1"></i> Verify & Confirm
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-reject-pay" data-id="${p.id}">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            bindPaymentActions();
+        }
+
+        function renderCashList(list) {
+            if (list.length === 0) {
+                cashTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">No pending cash orders.</td></tr>`;
+                return;
+            }
+
+            cashTableBody.innerHTML = list.map(p => `
+                <tr>
+                    <td class="ps-4">
+                        <span class="fw-bold fs-6">#${p.orderId}</span>
+                    </td>
+                    <td>
+                        <div class="fw-semibold">${p.studentName || 'Student'}</div>
+                        <small class="text-muted font-monospace fs-xxs">Reg: ${p.registerNumber || 'N/A'}</small>
+                    </td>
+                    <td><small class="text-muted">${p.itemsSummary || 'Canteen Items'}</small></td>
+                    <td><small class="text-muted">${UI.formatDate(p.createdAt)}</small></td>
+                    <td><span class="fw-extrabold text-warning fs-6">${UI.formatCurrency(p.amount)}</span></td>
+                    <td class="text-end pe-4">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-warning text-dark fw-bold btn-verify-pay" data-id="${p.id}">
+                                <i class="bi bi-cash-stack me-1"></i> Cash Received & Issue Bill
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-reject-pay" data-id="${p.id}">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            bindPaymentActions();
+        }
+
+        function bindPaymentActions() {
+            document.querySelectorAll('.btn-verify-pay').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = Number(btn.dataset.id);
+                    btn.disabled = true;
+                    btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
+
+                    try {
+                        const res = await ApiService.post(ENDPOINTS.STAFF_PAYMENTS_VERIFY(id), {});
+                        if (res.success) {
+                            UI.showToast("Payment verified! Order confirmed & bill generated.", "success");
+                            loadPayments();
+                        } else {
+                            throw new Error(res.message);
+                        }
+                    } catch (e) {
+                        UI.showToast(e.message, "danger");
+                        btn.disabled = false;
+                        btn.innerHTML = `<i class="bi bi-check-lg me-1"></i> Verify`;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.btn-reject-pay').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    if (!confirm("Are you sure you want to reject this payment and release the reserved stock?")) return;
+                    const id = Number(btn.dataset.id);
+                    btn.disabled = true;
+
+                    try {
+                        const res = await ApiService.post(ENDPOINTS.STAFF_PAYMENTS_REJECT(id), {
+                            reason: "UTR Mismatch / Invalid transaction reference"
+                        });
+                        if (res.success) {
+                            UI.showToast("Payment rejected and order cancelled.", "warning");
+                            loadPayments();
+                        } else {
+                            throw new Error(res.message);
+                        }
+                    } catch (e) {
+                        UI.showToast(e.message, "danger");
+                        btn.disabled = false;
+                    }
+                });
+            });
+        }
+
+        btnRefreshPayments.addEventListener('click', loadPayments);
+
+        loadPayments();
+        setInterval(loadPayments, 4000);
+    </script>
+</body>
+</html>

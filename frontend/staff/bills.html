@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bills Lookup | CampusCanteen</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- 80mm Print CSS -->
+    <link rel="stylesheet" href="../css/print-bill.css">
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top bg-surface border-bottom shadow-sm no-print">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                <div class="text-gold fs-4 d-flex align-items-center">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div>
+                    <div class="lh-1">
+                        <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Canteen</span>
+                    </div>
+                    <small class="text-muted d-block" style="font-size: 10px; font-weight: 500;">Staff Counter Portal</small>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#staffNav">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="staffNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="dashboard.html"><i class="bi bi-kanban me-1"></i> Order Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="payments.html"><i class="bi bi-credit-card-2-front me-1"></i> Payment Queue</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="inventory.html"><i class="bi bi-box-seam me-1"></i> Inventory Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="menu-management.html"><i class="bi bi-calendar2-check me-1"></i> Today's Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="food-management.html"><i class="bi bi-egg-fried me-1"></i> Dishes & Counters</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold" href="bills.html"><i class="bi bi-receipt me-1"></i> Bills Lookup</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="feedback.html"><i class="bi bi-star me-1"></i> Feedback</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <button id="themeToggleBtn" class="btn btn-icon btn-outline-secondary" type="button" title="Toggle Theme">
+                        <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+                    <div class="dropdown ms-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-badge-fill fs-5 text-warning"></i>
+                            <span id="navUserName" class="fw-semibold d-none d-md-inline">Staff Operator</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item text-danger" href="#" id="navLogoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container-fluid px-lg-4 py-4 no-print" style="max-width: 1200px;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div>
+                <h3 class="fw-bold mb-1">Canteen Bills Lookup & Reprint</h3>
+                <p class="text-muted fs-sm mb-0">Search all verified tax invoices and reprint 80mm thermal counter slips.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <input type="text" id="billSearchInput" class="form-control form-control-sm" placeholder="Search bill or order #..." style="width: 240px;">
+                <button class="btn btn-outline-primary btn-sm rounded-pill px-3" id="btnRefreshBills">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs for Pending Verification & Verified Bills -->
+        <ul class="nav nav-pills mb-4 gap-2" id="billsTabGroup">
+            <li class="nav-item">
+                <button class="nav-link active fw-bold" id="tabPendingBillsBtn" data-bs-toggle="pill" data-bs-target="#tabPendingBillsContent">
+                    <i class="bi bi-clock-history me-1"></i> Orders Pending Verification
+                    <span class="badge bg-danger ms-1" id="badgePendingBillsCount">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-bold" id="tabVerifiedBillsBtn" data-bs-toggle="pill" data-bs-target="#tabVerifiedBillsContent">
+                    <i class="bi bi-receipt-cutoff me-1"></i> Verified Bills & Invoices
+                    <span class="badge bg-success ms-1" id="badgeVerifiedBillsCount">0</span>
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="billsTabContent">
+            <!-- TAB 1: Pending Student Bills -->
+            <div class="tab-pane fade show active" id="tabPendingBillsContent">
+                <div class="card border-0 shadow-sm rounded-4 bg-surface overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light fs-xs text-uppercase text-muted">
+                                <tr>
+                                    <th class="ps-4">Order ID</th>
+                                    <th>Student</th>
+                                    <th>Items & Counter</th>
+                                    <th>Payment Method & UTR</th>
+                                    <th>Amount</th>
+                                    <th class="text-end pe-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staffPendingBillsTableBody">
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Checking pending orders...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: Verified Bills -->
+            <div class="tab-pane fade" id="tabVerifiedBillsContent">
+                <div class="card border-0 shadow-sm rounded-4 bg-surface overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light fs-xs text-uppercase text-muted">
+                                <tr>
+                                    <th class="ps-4">Bill Number</th>
+                                    <th>Order ID</th>
+                                    <th>Student</th>
+                                    <th>Date & Time</th>
+                                    <th>Payment</th>
+                                    <th>Total</th>
+                                    <th class="text-end pe-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staffBillsTableBody">
+                                <tr><td colspan="7" class="text-center py-4 text-muted">Loading bills...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 80mm Receipt Modal -->
+    <div class="modal fade" id="receiptModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header border-bottom bg-surface p-3 no-print">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-printer me-2 text-primary"></i>Reprint Thermal Receipt</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0 bg-light">
+                    <div id="thermalReceiptContent" class="p-3 bg-white mx-auto"></div>
+                </div>
+                <div class="modal-footer border-top bg-surface p-3 no-print">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary fw-bold" onclick="window.print()">
+                        <i class="bi bi-printer-fill me-1"></i> Print 80mm Slip
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from '../js/config.js';
+        import { ApiService } from '../js/api.js';
+        import { AuthGuard } from '../js/auth.js';
+        import { UI } from '../js/ui.js';
+        import { initChatbot } from '../js/chatbot.js';
+
+        const currentUser = AuthGuard.requireRole([CONFIG.ROLES.STAFF, CONFIG.ROLES.MANAGER]);
+        if (!currentUser) throw new Error("Unauthorized");
+
+        AuthGuard.setupNavbar();
+        UI.initTheme();
+        initChatbot();
+
+        const tableBody = document.getElementById('staffBillsTableBody');
+        const pendingTableBody = document.getElementById('staffPendingBillsTableBody');
+        const badgePending = document.getElementById('badgePendingBillsCount');
+        const badgeVerified = document.getElementById('badgeVerifiedBillsCount');
+        const searchInput = document.getElementById('billSearchInput');
+        const btnRefresh = document.getElementById('btnRefreshBills');
+        const thermalReceiptContent = document.getElementById('thermalReceiptContent');
+
+        let allBills = [];
+        let pendingBills = [];
+
+        async function loadAll() {
+            await Promise.all([loadPendingBills(), loadBills()]);
+        }
+
+        async function loadPendingBills() {
+            try {
+                const res = await ApiService.get(ENDPOINTS.STAFF_BILLS_PENDING);
+                pendingBills = Array.isArray(res) ? res : (res?.data || []);
+                badgePending.textContent = pendingBills.length;
+                renderPendingBills(pendingBills);
+            } catch (err) {
+                console.error("Failed to load pending bills:", err);
+                pendingTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-danger">${err.message}</td></tr>`;
+            }
+        }
+
+        async function loadBills() {
+            try {
+                const res = await ApiService.get(ENDPOINTS.STAFF_BILLS);
+                allBills = Array.isArray(res) ? res : (res?.data || []);
+                badgeVerified.textContent = allBills.length;
+                renderBills(allBills);
+            } catch (err) {
+                tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-danger">${err.message}</td></tr>`;
+            }
+        }
+
+        function renderPendingBills(list) {
+            const query = searchInput.value.toLowerCase().trim();
+            const filtered = list.filter(p => !query || 
+                String(p.orderId || p.order?.id).includes(query) || 
+                String(p.order?.orderNumber || '').toLowerCase().includes(query) ||
+                (p.order?.user?.fullName && p.order.user.fullName.toLowerCase().includes(query)) ||
+                (p.studentName && p.studentName.toLowerCase().includes(query)));
+
+            if (filtered.length === 0) {
+                pendingTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">No pending orders awaiting billing verification.</td></tr>`;
+                return;
+            }
+
+            pendingTableBody.innerHTML = filtered.map(p => {
+                const orderNum = p.order?.orderNumber || '#' + (p.orderId || p.order?.id);
+                const studentName = p.order?.user?.fullName || p.studentName || 'Student';
+                const regNo = p.order?.user?.student?.registerNumber || p.registerNumber || p.order?.user?.username || 'N/A';
+                const itemsStr = (p.order?.items || []).map(i => `${i.quantity}x ${i.itemName}`).join(', ') || 'Canteen Dishes';
+                const counter = (p.order?.items || []).map(i => i.counterName).filter((v, i, a) => a.indexOf(v) === i).join(', ') || 'Food Counter';
+                const amount = p.amount || p.order?.totalAmount || 0;
+
+                return `
+                    <tr>
+                        <td class="ps-4">
+                            <span class="fw-bold fs-6 text-primary">${orderNum}</span>
+                            <small class="d-block text-muted fs-xxs">Token ID: #${p.orderId || p.order?.id}</small>
+                        </td>
+                        <td>
+                            <div class="fw-semibold">${studentName}</div>
+                            <small class="text-muted font-monospace fs-xxs">Reg: ${regNo}</small>
+                        </td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 250px;">${itemsStr}</div>
+                            <small class="badge bg-secondary-subtle text-secondary fs-xxs">${counter}</small>
+                        </td>
+                        <td>
+                            <span class="badge ${p.paymentMethod === 'GPAY_UPI' ? 'bg-primary-subtle text-primary border border-primary-subtle' : 'bg-warning-subtle text-warning border border-warning-subtle'} fs-xs">
+                                ${p.paymentMethod}
+                            </span>
+                            ${p.utrReference || p.utrNumber ? `<div class="font-monospace fs-xxs text-primary fw-bold mt-1">UTR: ${p.utrReference || p.utrNumber}</div>` : '<div class="text-warning fs-xxs mt-1">Counter Cash</div>'}
+                        </td>
+                        <td>
+                            <span class="fw-extrabold text-dark fs-6">${UI.formatCurrency(amount)}</span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <button type="button" class="btn btn-sm btn-success fw-bold px-3 btn-verify-bill shadow-sm" data-id="${p.id}">
+                                <i class="bi bi-check-lg me-1"></i> Verify Bill
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.btn-verify-bill').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.dataset.id;
+                    btn.disabled = true;
+                    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span>Verifying...`;
+
+                    try {
+                        const res = await ApiService.post(ENDPOINTS.STAFF_BILLS_VERIFY(id));
+                        const bill = res?.data || res;
+                        UI.showToast(`Bill #${bill.billNumber || ''} verified and generated!`, "success");
+
+                        // Refresh both tables
+                        await loadAll();
+
+                        // Switch to Verified Invoices tab and show receipt modal
+                        const tabTrigger = new bootstrap.Tab(document.getElementById('tabVerifiedBillsBtn'));
+                        tabTrigger.show();
+
+                        if (bill && bill.id) {
+                            showReceiptModal(bill);
+                        }
+                    } catch (err) {
+                        UI.showToast(err.message || "Failed to verify bill", "danger");
+                        btn.disabled = false;
+                        btn.innerHTML = `<i class="bi bi-check-lg me-1"></i> Verify Bill`;
+                    }
+                });
+            });
+        }
+
+        function renderBills(bills) {
+            const query = searchInput.value.toLowerCase().trim();
+            const filtered = bills.filter(b => !query || 
+                b.billNumber.toLowerCase().includes(query) || 
+                String(b.orderId).includes(query) || 
+                (b.studentName && b.studentName.toLowerCase().includes(query)));
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No verified bills found matching search.</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map(b => `
+                <tr>
+                    <td class="ps-4 fw-bold font-monospace text-primary">${b.billNumber}</td>
+                    <td><span class="fw-semibold">#${b.orderId}</span></td>
+                    <td>
+                        <span class="fw-medium">${b.studentName || 'Student'}</span>
+                        <small class="d-block text-muted font-monospace fs-xxs">Reg: ${b.registerNumber || 'N/A'}</small>
+                    </td>
+                    <td><small class="text-muted">${UI.formatDate(b.billDate)}</small></td>
+                    <td>
+                        <span class="badge ${b.paymentMethod === 'GPAY_UPI' ? 'bg-primary-subtle text-primary border border-primary-subtle' : 'bg-warning-subtle text-warning border border-warning-subtle'} fs-xs">
+                            ${b.paymentMethod}
+                        </span>
+                        ${b.utrNumber ? `<div class="font-monospace fs-xxs text-muted mt-1">UTR: ${b.utrNumber}</div>` : ''}
+                    </td>
+                    <td class="fw-extrabold fs-6">${UI.formatCurrency(b.totalAmount)}</td>
+                    <td class="text-end pe-4">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 btn-view-thermal" data-id="${b.id}">
+                            <i class="bi bi-printer me-1"></i> Thermal Receipt
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.querySelectorAll('.btn-view-thermal').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    const bill = allBills.find(b => b.id === id);
+                    if (bill) showReceiptModal(bill);
+                });
+            });
+        }
+
+        function showReceiptModal(bill) {
+            const items = bill.items || [];
+            thermalReceiptContent.innerHTML = `
+                <div class="thermal-receipt" style="width: 80mm; margin: 0 auto; padding: 12px; font-family: 'Courier New', Courier, monospace; color: #000; background: #fff; font-size: 13px; line-height: 1.3;">
+                    <div style="text-align: center; border-bottom: 1px dashed #000; padding-bottom: 8px; margin-bottom: 8px;">
+                        <div style="font-size: 16px; font-weight: bold;">CAMPUS CANTEEN</div>
+                        <div style="font-size: 12px;">SMART CANTEEN MANAGEMENT</div>
+                        <div style="font-size: 11px;">Central Campus Food Court</div>
+                        <div style="font-size: 11px; margin-top: 4px;">*** TAX INVOICE / TOKEN ***</div>
+                    </div>
+
+                    <div style="margin-bottom: 8px; font-size: 12px;">
+                        <div><strong>Bill No:</strong> ${bill.billNumber}</div>
+                        <div><strong>Order ID:</strong> #${bill.orderId} (${bill.orderType || 'DINE_IN'})</div>
+                        <div><strong>Date:</strong> ${UI.formatDate(bill.billDate)}</div>
+                        <div><strong>Student:</strong> ${bill.studentName}</div>
+                        <div><strong>Reg No:</strong> ${bill.registerNumber || 'N/A'}</div>
+                        <div><strong>Payment:</strong> ${bill.paymentMethod} ${bill.utrNumber ? '(' + bill.utrNumber + ')' : ''}</div>
+                    </div>
+
+                    <table style="width: 100%; border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 6px 0; margin-bottom: 8px; font-size: 12px;">
+                        <thead>
+                            <tr style="text-align: left; border-bottom: 1px dashed #ccc;">
+                                <th>Item</th>
+                                <th style="text-align: center;">Qty</th>
+                                <th style="text-align: right;">Price</th>
+                                <th style="text-align: right;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${items.map(it => `
+                                <tr>
+                                    <td style="padding: 2px 0;">${it.itemName}</td>
+                                    <td style="text-align: center;">${it.quantity}</td>
+                                    <td style="text-align: right;">${Number(it.unitPrice).toFixed(2)}</td>
+                                    <td style="text-align: right;">${Number(it.subtotal).toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <div style="margin-bottom: 8px; font-size: 13px;">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 15px; border-top: 1px dashed #000; padding-top: 4px;">
+                            <span>NET AMOUNT:</span>
+                            <span>${UI.formatCurrency(bill.totalAmount)}</span>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; border-top: 1px dashed #000; padding-top: 8px; font-size: 11px;">
+                        <div>Counter Token: <strong>${bill.counterName || 'FOOD COUNTER / TEA COUNTER'}</strong></div>
+                        <div>Official Verified Receipt • Staff Reprint</div>
+                    </div>
+                </div>
+            `;
+
+            new bootstrap.Modal(document.getElementById('receiptModal')).show();
+        }
+
+        searchInput.addEventListener('input', () => {
+            renderPendingBills(pendingBills);
+            renderBills(allBills);
+        });
+
+        btnRefresh.addEventListener('click', loadAll);
+        loadAll();
+    </script>
+</body>
+</html>

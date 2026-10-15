@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | CampusCanteen</title>
+    <!-- Google Fonts: Inter, Plus Jakarta Sans, Caveat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-body d-flex flex-column min-vh-100">
+
+    <!-- Top Minimal Bar -->
+    <nav class="navbar bg-white border-bottom py-2 shadow-none">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <div class="text-gold fs-4 d-flex align-items-center">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div class="lh-1">
+                    <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Canteen</span>
+                </div>
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline-secondary btn-sm rounded-circle p-2" id="themeToggleBtn" title="Toggle Theme" style="width: 36px; height: 36px;">
+                    <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                </button>
+                <a href="index.html" class="btn btn-link btn-sm text-secondary text-decoration-none">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Split Layout Content -->
+    <main class="container my-auto py-4">
+        <div class="row g-0 justify-content-center align-items-stretch shadow-xl rounded-4 overflow-hidden border bg-white" style="max-width: 1020px; margin: auto;">
+            <!-- Left Branding Side with Food Visual -->
+            <div class="col-lg-5 p-5 text-white d-flex flex-column justify-content-between position-relative overflow-hidden" 
+                 style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.94), rgba(217, 119, 6, 0.94)), url('assets/hero-food-platter.jpg') center/cover;">
+                
+                <div class="position-relative z-1">
+                    <div class="d-inline-flex align-items-center gap-1 font-handwriting text-white mb-2 fs-4">
+                        <span>Are You Hungry? ☼</span>
+                    </div>
+                    <h2 class="fw-bolder mb-3 display-6 lh-sm" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+                        Fresh Food.<br>Happy Campus.
+                    </h2>
+                    <p class="text-white-50 mb-4 fs-6">
+                        Smart Canteen Management System. Sign in to view today's active menu, order meals in advance, pay seamlessly, and pick up without waiting.
+                    </p>
+                </div>
+
+                <!-- Floating Order Badge -->
+                <div class="bg-white text-dark rounded-4 p-3 shadow-lg my-3 position-relative z-1 d-flex align-items-center gap-3">
+                    <img src="assets/dish-biryani.jpg" alt="Dish" class="rounded-circle shadow-sm" style="width: 48px; height: 48px; object-fit: cover;">
+                    <div class="lh-1">
+                        <span class="badge bg-success-subtle text-success fs-xxs rounded-pill mb-1">Live Campus Canteen</span>
+                        <div class="fw-bold fs-sm">Hot Meals &amp; Quick Pickup</div>
+                        <small class="text-muted fs-xxs">Over 20+ authentic dishes freshly prepared</small>
+                    </div>
+                </div>
+
+                <div class="font-handwriting text-white text-end fs-4 position-relative z-1">
+                    Delicious Meals Everyday ♡
+                </div>
+            </div>
+
+            <!-- Right Form Side -->
+            <div class="col-lg-7 p-4 p-md-5 d-flex flex-column justify-content-center bg-white">
+                <div class="mb-4">
+                    <h3 class="fw-bold mb-1 text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif;">Welcome Back</h3>
+                    <p class="text-muted small mb-0">Enter your credentials and solve the security verification to sign in.</p>
+                </div>
+
+                <!-- Error Alert -->
+                <div id="loginAlert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                    <span id="loginAlertText"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <form id="loginForm">
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label small fw-semibold">Email Address <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-secondary"><i class="bi bi-envelope"></i></span>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="e.g. yourname@campus.edu" required>
+                        </div>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="loginUsername" class="form-label small fw-semibold">Username <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-secondary"><i class="bi bi-person"></i></span>
+                            <input type="text" class="form-control" id="loginUsername" placeholder="e.g. student_demo or your username" required>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label small fw-semibold">Password <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-secondary"><i class="bi bi-key"></i></span>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn">
+                                <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Captcha Section -->
+                    <div class="mb-4">
+                        <label for="loginCaptchaInput" class="form-label small fw-semibold">Security Verification (Captcha) <span class="text-danger">*</span></label>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <div class="border rounded p-1 bg-white shadow-sm d-flex align-items-center justify-content-center" style="min-width: 185px; height: 56px;">
+                                <img id="captchaImage" src="" alt="Captcha Image" class="rounded" style="height: 48px; max-width: 100%; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                            </div>
+                            <button type="button" class="btn btn-outline-gold btn-sm px-3" id="refreshCaptchaBtn" title="Generate New Captcha">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                            </button>
+                            <small class="text-muted" style="font-size: 11px;">Expires in 5 mins</small>
+                        </div>
+                        <input type="hidden" id="loginCaptchaId">
+                        <input type="text" class="form-control text-uppercase fw-bold" id="loginCaptchaInput" placeholder="Enter 5-character captcha code" maxlength="5" autocomplete="off" spellcheck="false" required style="letter-spacing: 2px;">
+                        <div class="form-text text-muted d-flex align-items-center gap-1 mt-1" style="font-size: 11px;">
+                            <i class="bi bi-info-circle text-gold"></i>
+                            <span>Type the 5 bold characters shown above (case-insensitive).</span>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="loginSubmitBtn" class="btn btn-gold w-100 py-2 rounded-pill fw-semibold shadow-sm fs-6">
+                        <span id="loginBtnSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
+                        Sign In to Canteen
+                    </button>
+                </form>
+
+                <div class="text-center mt-3 pt-3 border-top">
+                    <p class="text-muted small mb-2">Don't have a student account?</p>
+                    <a href="register.html" class="btn btn-outline-gold btn-sm rounded-pill px-4 fw-semibold">
+                        <i class="bi bi-person-plus me-1"></i>Register New Student
+                    </a>
+                </div>
+
+                <!-- Collapsed Staff / Management Demo Access Panel -->
+                <div class="mt-4 pt-2">
+                    <div class="card bg-body-tertiary border-0 rounded-3 p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small fw-bold text-dark"><i class="bi bi-key-fill text-gold me-1"></i>Demo Accounts (1-Click Fill)</span>
+                            <button class="btn btn-sm btn-link text-decoration-none p-0 text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#demoAccountsPanel">
+                                View Demo <i class="bi bi-chevron-down ms-1"></i>
+                            </button>
+                        </div>
+                        <div class="collapse mt-2 pt-2 border-top" id="demoAccountsPanel">
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill demo-fill-btn" 
+                                    data-email="staff@dmicanteen.com" data-username="staff_demo" data-password="Staff@123">
+                                    <i class="bi bi-person-workspace text-warning me-1"></i>Staff Demo
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill demo-fill-btn" 
+                                    data-email="management@dmicanteen.com" data-username="manager_demo" data-password="Manager@123">
+                                    <i class="bi bi-graph-up text-primary me-1"></i>Manager Demo
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill demo-fill-btn" 
+                                    data-email="student@dmicanteen.com" data-username="student_demo" data-password="Student@123">
+                                    <i class="bi bi-mortarboard text-success me-1"></i>Student Demo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Login Logic Script -->
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from './js/config.js';
+        import { ApiService } from './js/api.js';
+        import { AuthGuard } from './js/auth.js';
+        import { UI } from './js/ui.js';
+
+        UI.initTheme();
+
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('loginEmail');
+        const usernameInput = document.getElementById('loginUsername');
+        const passwordInput = document.getElementById('loginPassword');
+        const captchaInput = document.getElementById('loginCaptchaInput');
+        const captchaIdInput = document.getElementById('loginCaptchaId');
+        const captchaImg = document.getElementById('captchaImage');
+        const refreshCaptchaBtn = document.getElementById('refreshCaptchaBtn');
+        const submitBtn = document.getElementById('loginSubmitBtn');
+        const spinner = document.getElementById('loginBtnSpinner');
+        const alertBox = document.getElementById('loginAlert');
+        const alertText = document.getElementById('loginAlertText');
+        const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+        // Toggle Password Visibility
+        togglePasswordBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            togglePasswordIcon.className = isPassword ? 'bi bi-eye-slash' : 'bi bi-eye';
+        });
+
+        let isCaptchaLoading = false;
+
+        // Auto-uppercase input characters for immediate visual clarity
+        captchaInput.addEventListener('input', () => {
+            captchaInput.value = captchaInput.value.toUpperCase();
+        });
+
+        // Load Captcha Image with cache-busting
+        async function loadCaptcha() {
+            if (isCaptchaLoading) return;
+            isCaptchaLoading = true;
+            try {
+                refreshCaptchaBtn.disabled = true;
+                const oldId = captchaIdInput.value;
+                const cacheBuster = `_t=${Date.now()}`;
+                const url = oldId 
+                    ? `${ENDPOINTS.AUTH_CAPTCHA}?oldCaptchaId=${encodeURIComponent(oldId)}&${cacheBuster}` 
+                    : `${ENDPOINTS.AUTH_CAPTCHA}?${cacheBuster}`;
+                
+                const data = await ApiService.get(url);
+                const captchaId = data?.captchaId || data?.data?.captchaId;
+                const captchaImgSrc = data?.imageBase64 || data?.captchaImage || data?.data?.imageBase64 || data?.data?.captchaImage;
+
+                if (captchaId && captchaImgSrc) {
+                    captchaIdInput.value = captchaId;
+                    captchaImg.src = captchaImgSrc;
+                    captchaInput.value = '';
+                } else {
+                    throw new Error("Invalid captcha response format");
+                }
+            } catch (err) {
+                console.error("Failed to load captcha:", err);
+                UI.showToast("Failed to load security verification. Click refresh to retry.", "warning");
+            } finally {
+                isCaptchaLoading = false;
+                refreshCaptchaBtn.disabled = false;
+            }
+        }
+
+        refreshCaptchaBtn.addEventListener('click', () => loadCaptcha());
+
+        // Autofill Demo Credentials
+        document.querySelectorAll('.demo-fill-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                emailInput.value = btn.dataset.email;
+                usernameInput.value = btn.dataset.username;
+                passwordInput.value = btn.dataset.password;
+                captchaInput.value = '';
+                await loadCaptcha();
+                captchaInput.focus();
+                UI.showToast(`Autofilled credentials for ${btn.dataset.username}. Please enter the captcha code.`, "info");
+            });
+        });
+
+        // Handle URL parameters (e.g. ?demo=staff)
+        const urlParams = new URLSearchParams(window.location.search);
+        let demoParamHandled = false;
+        if (urlParams.get('demo') === 'staff') {
+            emailInput.value = 'staff@dmicanteen.com';
+            usernameInput.value = 'staff_demo';
+            passwordInput.value = 'Staff@123';
+            captchaInput.value = '';
+            demoParamHandled = true;
+        } else if (urlParams.get('demo') === 'manager') {
+            emailInput.value = 'management@dmicanteen.com';
+            usernameInput.value = 'manager_demo';
+            passwordInput.value = 'Manager@123';
+            captchaInput.value = '';
+            demoParamHandled = true;
+        } else if (urlParams.get('demo') === 'student') {
+            emailInput.value = 'student@dmicanteen.com';
+            usernameInput.value = 'student_demo';
+            passwordInput.value = 'Student@123';
+            captchaInput.value = '';
+            demoParamHandled = true;
+        }
+
+        // Form Submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            alertBox.classList.add('d-none');
+
+            const email = emailInput.value.trim();
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            const captchaCode = captchaInput.value.trim();
+            const captchaId = captchaIdInput.value;
+
+            if (!email || !username || !password || !captchaCode) {
+                alertText.textContent = "Please fill in all required fields.";
+                alertBox.classList.remove('d-none');
+                return;
+            }
+
+            if (!captchaId) {
+                alertText.textContent = "Security verification session not found. Please click Refresh to load a new code.";
+                alertBox.classList.remove('d-none');
+                await loadCaptcha();
+                return;
+            }
+
+            submitBtn.disabled = true;
+            spinner.classList.remove('d-none');
+
+            let response;
+            try {
+                response = await ApiService.post(ENDPOINTS.AUTH_LOGIN, {
+                    email,
+                    username,
+                    password,
+                    captchaId,
+                    captchaCode
+                });
+            } catch (err) {
+                alertText.textContent = err.message || "Invalid credentials or captcha answer. Please try again.";
+                alertBox.classList.remove('d-none');
+                await loadCaptcha();
+                captchaInput.focus();
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+                return;
+            }
+
+            if (response && response.token) {
+                ApiService.setToken(response.token);
+                ApiService.setUser(response.user);
+                submitBtn.classList.remove('btn-gold');
+                submitBtn.classList.add('btn-success');
+                submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Verified! Signing in...';
+                try {
+                    AuthGuard.redirectUser(response.user.role);
+                } catch (redirectionErr) {
+                    console.error("Redirection error:", redirectionErr);
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alertText.textContent = "Invalid response received from authentication service.";
+                alertBox.classList.remove('d-none');
+                await loadCaptcha();
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+            }
+        });
+
+        // Initialize single captcha on page load
+        loadCaptcha();
+    </script>
+</body>
+</html>

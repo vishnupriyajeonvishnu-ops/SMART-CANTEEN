@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusCanteen | Student Menu & Ordering</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top bg-surface border-bottom shadow-sm">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                <div class="text-gold fs-4 d-flex align-items-center">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div>
+                    <div class="lh-1">
+                        <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Canteen</span>
+                    </div>
+                    <small class="text-muted d-block" style="font-size: 10px; font-weight: 500;">Student Portal</small>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#studentNav">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="studentNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold" href="dashboard.html"><i class="bi bi-grid-fill me-1"></i> Today's Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="orders.html"><i class="bi bi-clock-history me-1"></i> My Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="bills.html"><i class="bi bi-receipt me-1"></i> My Bills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="feedback.html"><i class="bi bi-star me-1"></i> Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="profile.html"><i class="bi bi-person me-1"></i> Profile</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggleBtn" class="btn btn-icon btn-outline-secondary" type="button" title="Toggle Dark/Light Mode">
+                        <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+
+                    <!-- Cart Drawer Trigger Button -->
+                    <button class="btn btn-primary d-flex align-items-center gap-2 px-3 position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                        <i class="bi bi-bag-fill fs-5"></i>
+                        <span class="d-none d-sm-inline fw-semibold">Cart</span>
+                        <span class="cart-badge badge rounded-pill bg-danger" style="display:none;">0</span>
+                    </button>
+
+                    <!-- User Profile Dropdown -->
+                    <div class="dropdown ms-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-target="#userMenu" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5 text-primary"></i>
+                            <span id="navUserName" class="fw-semibold d-none d-md-inline">Student</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" id="userMenu">
+                            <li><span class="dropdown-header text-uppercase fs-xs">Logged in as Student</span></li>
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item" href="orders.html"><i class="bi bi-receipt-cutoff me-2"></i>Order History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="navLogoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="container-fluid px-lg-4 py-4">
+        
+        <!-- Welcome & Banner Card -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4 text-white p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);">
+            <div class="row align-items-center position-relative z-1">
+                <div class="col-lg-8">
+                    <span class="badge bg-white text-dark fw-bold mb-2 px-3 py-1 rounded-pill">
+                        <i class="bi bi-egg-fried text-gold me-1"></i>Campus Canteen
+                    </span>
+                    <h2 class="display-6 fw-bold mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif;">Fresh Food. Happy Campus.</h2>
+                    <p class="mb-0 text-white-50 fs-6">Select delicious meals from our live daily menu, pay via UPI / Cash, and pick up hot food without waiting in line.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                    <div class="bg-white text-dark p-3 rounded-4 shadow d-inline-block text-start">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-success-subtle text-success"><i class="bi bi-circle-fill fs-xs me-1"></i>Canteen Open</span>
+                            <span class="text-muted fs-xs" id="currentTimeDisplay">Today</span>
+                        </div>
+                        <div class="fw-bold fs-6">Live Counter Pickups</div>
+                        <small class="text-muted fs-xxs">Counters: FC-01 (Food) | TC-01 (Tea)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter, Search and Category Bar -->
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Search dishes (e.g., Dosa, Biryani, Coffee)...">
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="categoryFilterContainer">
+                        <button class="btn btn-sm btn-primary active category-filter-btn" data-category="ALL">All Items</button>
+                        <!-- Dynamic Category Buttons injected here -->
+                    </div>
+                </div>
+            </div>
+            <!-- Secondary Filters (Veg / Non-veg) -->
+            <div class="d-flex align-items-center gap-3 pt-3 mt-3 border-top">
+                <span class="text-muted fs-xs fw-semibold text-uppercase">Dietary Filter:</span>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="dietFilter" id="dietAll" value="ALL" checked>
+                    <label class="form-check-label fs-sm fw-medium" for="dietAll">All</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="dietFilter" id="dietVeg" value="VEG">
+                    <label class="form-check-label fs-sm fw-medium text-success" for="dietVeg"><i class="bi bi-circle-fill fs-xs me-1"></i>Pure Veg</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="dietFilter" id="dietNonVeg" value="NON_VEG">
+                    <label class="form-check-label fs-sm fw-medium text-danger" for="dietNonVeg"><i class="bi bi-square-fill fs-xs me-1"></i>Non-Veg</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Items Grid -->
+        <div class="row g-4" id="menuItemsGrid">
+            <!-- Loading Skeletons -->
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-muted mt-2">Loading today's fresh canteen menu...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Offcanvas Cart Drawer -->
+    <div class="offcanvas offcanvas-end shadow-lg" tabindex="-1" id="cartOffcanvas" style="width: 420px; max-width: 90vw;">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold d-flex align-items-center gap-2">
+                <i class="bi bi-bag-check-fill text-primary"></i> Your Order Cart
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column p-0">
+            <!-- Cart Items List -->
+            <div class="flex-grow-1 overflow-y-auto p-3" id="cartItemsContainer">
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-cart-x fs-1 opacity-50"></i>
+                    <p class="mt-2 mb-0">Your cart is empty.</p>
+                    <small>Select delicious items from the menu to get started.</small>
+                </div>
+            </div>
+
+            <!-- Cart Footer & Checkout -->
+            <div class="border-top p-3 bg-body-tertiary" id="cartFooterSection" style="display: none;">
+                <!-- Order Type Choice -->
+                <div class="mb-3">
+                    <label class="form-label fs-xs text-uppercase fw-bold text-muted">Dining Preference</label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input type="radio" class="btn-check" name="orderType" id="typeDineIn" value="DINE_IN" checked>
+                            <label class="btn btn-outline-primary w-100 fs-sm fw-semibold" for="typeDineIn">
+                                <i class="bi bi-shop me-1"></i> Dine In
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <input type="radio" class="btn-check" name="orderType" id="typeTakeAway" value="TAKE_AWAY">
+                            <label class="btn btn-outline-primary w-100 fs-sm fw-semibold" for="typeTakeAway">
+                                <i class="bi bi-bag me-1"></i> Take Away
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method Choice -->
+                <div class="mb-3">
+                    <label class="form-label fs-xs text-uppercase fw-bold text-muted">Payment Method</label>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="form-check p-2 border rounded-3 bg-body">
+                            <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="payGpay" value="GPAY_UPI" checked>
+                            <label class="form-check-label ms-2 d-flex align-items-center justify-content-between w-100 pe-2" for="payGpay">
+                                <span class="fw-semibold"><i class="bi bi-qr-code-scan text-primary me-2"></i>UPI / GPay</span>
+                                <span class="badge bg-success-subtle text-success fs-xs">Instant Dynamic QR</span>
+                            </label>
+                        </div>
+                        <div class="form-check p-2 border rounded-3 bg-body">
+                            <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="payCash" value="CASH">
+                            <label class="form-check-label ms-2 d-flex align-items-center justify-content-between w-100 pe-2" for="payCash">
+                                <span class="fw-semibold"><i class="bi bi-cash-stack text-warning me-2"></i>Cash at Counter</span>
+                                <span class="badge bg-secondary-subtle text-secondary fs-xs">Staff Verification</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="card border-0 bg-surface p-3 mb-3 shadow-sm rounded-3">
+                    <div class="d-flex justify-content-between mb-1 fs-sm">
+                        <span class="text-muted">Item Subtotal</span>
+                        <span class="fw-semibold" id="cartSubtotalText">₹0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1 fs-sm">
+                        <span class="text-muted">Canteen Service Tax (0%)</span>
+                        <span class="fw-semibold">₹0.00</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold fs-6">Grand Total</span>
+                        <span class="fw-bold fs-5 text-primary" id="cartGrandTotalText">₹0.00</span>
+                    </div>
+                </div>
+
+                <!-- Place Order Button -->
+                <button type="button" class="btn btn-primary w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 shadow" id="btnPlaceOrder">
+                    <span>Proceed to Order</span>
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Chatbot Widget is loaded via chatbot.js -->
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from '../js/config.js';
+        import { ApiService } from '../js/api.js';
+        import { AuthGuard } from '../js/auth.js';
+        import { UI } from '../js/ui.js';
+        import { initChatbot } from '../js/chatbot.js';
+        import { getFoodImage } from '../js/food-images.js';
+
+        // 1. Enforce student role
+        const currentUser = AuthGuard.requireRole([CONFIG.ROLES.STUDENT]);
+        if (!currentUser) throw new Error("Unauthorized");
+
+        AuthGuard.setupNavbar();
+        UI.initTheme();
+        UI.updateCartBadge();
+        initChatbot();
+
+        // State variables
+        let allMenuItems = [];
+        let activeCategory = 'ALL';
+        let activeDiet = 'ALL';
+        let searchQuery = '';
+
+        // Elements
+        const grid = document.getElementById('menuItemsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryContainer = document.getElementById('categoryFilterContainer');
+        const cartItemsContainer = document.getElementById('cartItemsContainer');
+        const cartFooterSection = document.getElementById('cartFooterSection');
+        const cartSubtotalText = document.getElementById('cartSubtotalText');
+        const cartGrandTotalText = document.getElementById('cartGrandTotalText');
+        const btnPlaceOrder = document.getElementById('btnPlaceOrder');
+
+        // Set date string
+        document.getElementById('currentTimeDisplay').textContent = new Date().toLocaleDateString('en-IN', {
+            weekday: 'short', day: 'numeric', month: 'short'
+        });
+
+        // 2. Fetch today's menu & categories
+        async function loadMenu() {
+            try {
+                const [menuRes, catRes] = await Promise.all([
+                    ApiService.get(ENDPOINTS.MENU_TODAY),
+                    ApiService.get(ENDPOINTS.CATEGORIES)
+                ]);
+
+                allMenuItems = Array.isArray(menuRes) ? menuRes : (menuRes?.data || []);
+                const cats = Array.isArray(catRes) ? catRes : (catRes?.data || []);
+                renderCategories(cats);
+                renderMenu();
+            } catch (err) {
+                grid.innerHTML = `
+                    <div class="col-12 text-center py-5 text-danger">
+                        <i class="bi bi-exclamation-triangle fs-1"></i>
+                        <p class="mt-2 fw-semibold">Failed to load canteen menu: ${err.message}</p>
+                        <button class="btn btn-outline-primary btn-sm" onclick="location.reload()">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        // 3. Render Category Tabs
+        function renderCategories(categories) {
+            categoryContainer.innerHTML = `
+                <button class="btn btn-sm btn-primary active category-filter-btn" data-category="ALL">All Items</button>
+            `;
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-sm btn-outline-secondary category-filter-btn';
+                btn.dataset.category = cat.id;
+                btn.textContent = cat.name;
+                categoryContainer.appendChild(btn);
+            });
+
+            // Bind click handlers
+            document.querySelectorAll('.category-filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.category-filter-btn').forEach(b => {
+                        b.classList.remove('btn-primary', 'active');
+                        b.classList.add('btn-outline-secondary');
+                    });
+                    btn.classList.remove('btn-outline-secondary');
+                    btn.classList.add('btn-primary', 'active');
+                    activeCategory = btn.dataset.category;
+                    renderMenu();
+                });
+            });
+        }
+
+        // 4. Render Menu Items Grid
+        function renderMenu() {
+            const filtered = allMenuItems.filter(item => {
+                // Category match
+                const matchCat = (activeCategory === 'ALL' || String(item.categoryId) === String(activeCategory));
+                // Dietary match
+                const matchDiet = (activeDiet === 'ALL' || (activeDiet === 'VEG' && item.veg) || (activeDiet === 'NON_VEG' && !item.veg));
+                // Search match
+                const matchSearch = (!searchQuery || item.name.toLowerCase().includes(searchQuery) || (item.description && item.description.toLowerCase().includes(searchQuery)));
+                return matchCat && matchDiet && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-12 text-center py-5 text-muted">
+                        <i class="bi bi-cup-straw fs-1 opacity-50"></i>
+                        <p class="mt-2 mb-0 fw-semibold">No food items found matching your filter.</p>
+                        <small>Try selecting a different category or clearing your search.</small>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const isSoldOut = !item.availableInMenu || item.currentStock <= 0;
+                const isVeg = item.veg !== false;
+                const imgUrl = getFoodImage(item.name, item.categoryName, '../', item.imageUrl);
+                const rating = (4.3 + ((item.id * 7) % 6) / 10).toFixed(1);
+                const reviewCount = 50 + (item.id * 13) % 80;
+
+                const vegBadge = isVeg
+                    ? `<span class="badge bg-success position-absolute top-0 start-0 m-2 rounded-pill fs-xxs">VEG</span>`
+                    : `<span class="badge bg-danger position-absolute top-0 start-0 m-2 rounded-pill fs-xxs">NON-VEG</span>`;
+
+                const stockBadge = isSoldOut
+                    ? `<span class="badge bg-danger text-white fw-bold"><i class="bi bi-x-circle me-1"></i>SOLD OUT</span>`
+                    : `<span class="badge bg-success-subtle text-success border border-success-subtle fw-medium"><i class="bi bi-check2 me-1"></i>${item.currentStock} in stock</span>`;
+
+                const counterBadge = `<span class="badge bg-light text-dark border fs-xs"><i class="bi bi-shop me-1 text-gold"></i>${item.counterCode || 'FC-01'}</span>`;
+
+                return `
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                        <div class="popular-food-card ${isSoldOut ? 'opacity-75' : ''}">
+                            <div class="position-relative">
+                                <img src="${imgUrl}" alt="${item.name}" class="popular-food-img mb-2" loading="lazy" decoding="async" onerror="if(!this.dataset.fallback){ this.dataset.fallback='1'; this.src='../assets/hero-food-platter.jpg'; }">
+                                ${vegBadge}
+                            </div>
+                            <div class="d-flex flex-column flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    ${counterBadge}
+                                    ${stockBadge}
+                                </div>
+                                <h6 class="fw-bold mb-1 text-truncate text-dark" title="${item.name}">${item.name}</h6>
+                                <p class="text-muted fs-xs line-clamp-2 flex-grow-1 mb-2" style="min-height: 28px;">${item.description || 'Authentic hygienic campus kitchen preparation'}</p>
+                                <div class="d-flex align-items-center gap-1 text-gold mb-2" style="font-size: 11px;">
+                                    <i class="bi bi-star-fill"></i>
+                                    <span class="fw-bold text-dark">${rating}</span>
+                                    <span class="text-muted">(${reviewCount}+)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto">
+                                    <span class="fs-5 fw-extrabold text-dark">${UI.formatCurrency(item.price)}</span>
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-sm ${isSoldOut ? 'btn-secondary disabled' : 'popular-cart-btn'} shadow-sm btn-add-cart" 
+                                        data-id="${item.id}"
+                                        title="${isSoldOut ? 'Sold Out' : 'Add to Order'}"
+                                        ${isSoldOut ? 'disabled' : ''}>
+                                        <i class="bi bi-cart-plus-fill fs-6"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Bind Add to Cart buttons
+            grid.querySelectorAll('.btn-add-cart').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    const item = allMenuItems.find(i => i.id === id);
+                    if (item) {
+                        UI.addToCart(item, 1);
+                        renderCart();
+                    }
+                });
+            });
+        }
+
+        // 5. Render Cart Drawer
+        function renderCart() {
+            const cart = UI.getCart();
+            UI.updateCartBadge();
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-cart-x fs-1 opacity-50"></i>
+                        <p class="mt-2 mb-0">Your cart is empty.</p>
+                        <small>Select delicious items from the menu to get started.</small>
+                    </div>
+                `;
+                cartFooterSection.style.display = 'none';
+                return;
+            }
+
+            cartFooterSection.style.display = 'block';
+
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="card border-0 bg-surface shadow-sm rounded-3 p-3 mb-2">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="d-flex align-items-center gap-1 mb-1">
+                                <span class="fs-xs fw-semibold ${item.veg ? 'text-success' : 'text-danger'}">
+                                    <i class="bi ${item.veg ? 'bi-circle-fill' : 'bi-square-fill'} fs-xs"></i>
+                                </span>
+                                <span class="fw-semibold fs-sm">${item.name}</span>
+                            </div>
+                            <span class="badge bg-secondary-subtle text-secondary fs-xs">${item.counterName}</span>
+                        </div>
+                        <span class="fw-bold text-primary fs-sm">${UI.formatCurrency(item.price * item.quantity)}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                        <span class="text-muted fs-xs">${UI.formatCurrency(item.price)} each</span>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-secondary btn-cart-dec px-2" data-id="${item.id}">-</button>
+                            <span class="btn btn-outline-secondary disabled fw-bold px-2 text-dark bg-body">${item.quantity}</span>
+                            <button type="button" class="btn btn-outline-secondary btn-cart-inc px-2" data-id="${item.id}">+</button>
+                            <button type="button" class="btn btn-outline-danger btn-cart-remove ms-2 rounded-2" data-id="${item.id}" title="Remove"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Calculate totals
+            const total = UI.getCartTotal();
+            cartSubtotalText.textContent = UI.formatCurrency(total);
+            cartGrandTotalText.textContent = UI.formatCurrency(total);
+
+            // Bind quantity events
+            cartItemsContainer.querySelectorAll('.btn-cart-dec').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    const item = cart.find(i => i.id === id);
+                    if (item) {
+                        UI.updateCartQty(id, item.quantity - 1);
+                        renderCart();
+                    }
+                });
+            });
+
+            cartItemsContainer.querySelectorAll('.btn-cart-inc').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    const item = cart.find(i => i.id === id);
+                    if (item) {
+                        UI.updateCartQty(id, item.quantity + 1);
+                        renderCart();
+                    }
+                });
+            });
+
+            cartItemsContainer.querySelectorAll('.btn-cart-remove').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    UI.updateCartQty(id, 0);
+                    renderCart();
+                });
+            });
+        }
+
+        // 6. Handle Search & Dietary Radio
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            renderMenu();
+        });
+
+        document.querySelectorAll('input[name="dietFilter"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                activeDiet = e.target.value;
+                renderMenu();
+            });
+        });
+
+        // 7. Place Order Flow
+        btnPlaceOrder.addEventListener('click', async () => {
+            const cart = UI.getCart();
+            if (cart.length === 0) {
+                UI.showToast("Your cart is empty!", "warning");
+                return;
+            }
+
+            const orderType = document.querySelector('input[name="orderType"]:checked').value;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            const items = cart.map(i => ({
+                foodItemId: i.id,
+                quantity: i.quantity
+            }));
+
+            // Idempotency key to prevent accidental duplicate submissions
+            const idempotencyKey = 'IDEMP-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8);
+
+            btnPlaceOrder.disabled = true;
+            btnPlaceOrder.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Placing Order...`;
+
+            try {
+                const response = await ApiService.post(ENDPOINTS.STUDENT_ORDERS, {
+                    orderType: orderType,
+                    paymentMethod: paymentMethod,
+                    items: items
+                }, {
+                    'Idempotency-Key': idempotencyKey
+                });
+
+                // Reliably resolve order payload
+                const order = (response && response.data && typeof response.data === 'object') ? response.data : response;
+                const orderId = order ? (order.id || order.orderId || order.orderNumber) : null;
+
+                if (order && orderId) {
+                    UI.clearCart();
+                    UI.showToast(`Order #${orderId} placed successfully!`, "success");
+
+                    // Close offcanvas
+                    const bsOffcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('cartOffcanvas'));
+                    if (bsOffcanvas) bsOffcanvas.hide();
+
+                    if (paymentMethod === 'GPAY_UPI') {
+                        // Redirect to UPI payment screen with generated order ID
+                        window.location.href = `upi-payment.html?orderId=${orderId}&amount=${order.totalAmount || 0}`;
+                    } else {
+                        // Cash order placed -> CASH_PENDING -> redirect to orders page with generated order ID
+                        window.location.href = `orders.html?orderId=${orderId}&cash=true`;
+                    }
+                } else {
+                    throw new Error(response.message || "Order creation failed: valid order ID not received.");
+                }
+            } catch (err) {
+                UI.showToast(err.message, "danger");
+                btnPlaceOrder.disabled = false;
+                btnPlaceOrder.innerHTML = `<span>Proceed to Order</span><i class="bi bi-arrow-right"></i>`;
+            }
+        });
+
+        // Initial Load
+        loadMenu();
+        renderCart();
+    </script>
+</body>
+</html>

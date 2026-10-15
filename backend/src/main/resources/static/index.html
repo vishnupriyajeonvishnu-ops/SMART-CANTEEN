@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusCanteen | Good Food • Happy Students • Better Campus</title>
+    <!-- Google Fonts: Inter & Caveat (Handwriting) & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top py-2 py-lg-3 shadow-none">
+        <div class="container px-lg-4">
+            <!-- Brand Logo -->
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <div class="d-flex align-items-center justify-content-center text-gold" style="font-size: 1.85rem;">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div>
+                    <div class="lh-1">
+                        <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.35rem; letter-spacing: -0.5px;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.35rem; letter-spacing: -0.5px;">Canteen</span>
+                    </div>
+                    <small class="text-muted d-block" style="font-size: 10px; font-weight: 500; letter-spacing: 0.3px;">Good Food • Happy Students • Better Campus</small>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#campusNavbar">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="campusNavbar">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-campus active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-campus" href="#popular">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-campus" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-campus" href="#contact">Contact</a>
+                    </li>
+                </ul>
+
+                <!-- Action Buttons -->
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-icon btn-outline-secondary rounded-circle" id="themeToggleBtn" title="Toggle Theme" style="width: 38px; height: 38px;">
+                        <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+                    <a href="#liveMenuSection" class="btn btn-sm btn-icon btn-outline-secondary rounded-circle" title="Search Dishes" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-search"></i>
+                    </a>
+                    <a href="login.html" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-1">
+                        <i class="bi bi-person"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="login.html" class="btn btn-sm btn-gold rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-1">
+                        <i class="bi bi-cart3"></i>
+                        <span>Order Now</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section (Pixel-Perfect from Attached Mockup) -->
+        <section id="home" class="hero-campus py-4 py-lg-5 position-relative">
+            <!-- Sunburst Arc Backdrop on Right -->
+            <div class="hero-sunburst d-none d-lg-block"></div>
+            <!-- Rotated Golden Watermark -->
+            <div class="hero-watermark-vertical d-none d-xl-block">LET'S ORDER NOW</div>
+
+            <div class="container position-relative" style="z-index: 5;">
+                <div class="row align-items-center g-4 g-lg-5">
+                    <!-- Left Hero Content -->
+                    <div class="col-lg-6 text-center text-lg-start">
+                        <!-- Playful Handwriting Badge -->
+                        <div class="d-inline-flex align-items-center gap-1 font-handwriting text-gold mb-2" style="font-size: 1.65rem; font-weight: 700;">
+                            <span>Are You Hungry?</span>
+                            <span class="fs-4">☼</span>
+                        </div>
+
+                        <!-- Massive Display Typography -->
+                        <h1 class="display-3 fw-bolder mb-3 text-dark lh-sm" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -1.5px;">
+                            Fresh Food.<br>
+                            <span class="text-gold">Happy Campus.</span>
+                        </h1>
+
+                        <!-- Subtitle Description -->
+                        <p class="lead text-secondary mb-4 fs-6" style="max-width: 480px; line-height: 1.65;">
+                            Tasty, healthy and affordable meals &mdash; made for students, by students. Order your favourite food and make your campus life better!
+                        </p>
+
+                        <!-- Action CTAs -->
+                        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start mb-4">
+                            <a href="#popular" class="btn btn-gold btn-lg rounded-pill px-4 py-2 fw-semibold fs-6 d-inline-flex align-items-center gap-2">
+                                <i class="bi bi-fork"></i>
+                                <span>Explore Menu</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                            <a href="#liveMenuSection" class="btn btn-outline-gold btn-lg rounded-pill px-4 py-2 fw-semibold fs-6 d-inline-flex align-items-center gap-2 bg-white">
+                                <i class="bi bi-calendar2-check"></i>
+                                <span>Today's Menu</span>
+                            </a>
+                        </div>
+
+                        <!-- Floating Food Preview Cards (Matching the reference mockup) -->
+                        <div class="row g-3 pt-2 justify-content-center justify-content-lg-start">
+                            <!-- Card 1: Chicken Biryani (Light Card) -->
+                            <div class="col-11 col-sm-6 col-lg-6">
+                                <div class="hero-mini-card bg-white border d-flex align-items-center gap-3">
+                                    <img src="assets/dish-biryani.jpg" alt="Chicken Biryani" class="rounded-circle shadow-sm flex-shrink-0" style="width: 54px; height: 54px; object-fit: cover;">
+                                    <div class="flex-grow-1 min-w-0 text-start">
+                                        <h6 class="fw-bold mb-0 text-truncate text-dark">Chicken Biryani</h6>
+                                        <small class="text-muted d-block text-truncate" style="font-size: 11px;">Aromatic rice with spiced chicken.</small>
+                                        <div class="d-flex align-items-center justify-content-between mt-1">
+                                            <div class="d-flex align-items-center gap-1 text-gold" style="font-size: 11px;">
+                                                <i class="bi bi-star-fill"></i>
+                                                <span class="fw-bold text-dark">4.8</span>
+                                                <span class="text-muted">(120+)</span>
+                                            </div>
+                                            <div class="fw-bold text-dark fs-6">₹60</div>
+                                        </div>
+                                    </div>
+                                    <a href="login.html" class="popular-cart-btn text-decoration-none shadow-sm" title="Add to order">
+                                        <i class="bi bi-cart-fill fs-6"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Veg Noodles (Dark Forest Green Card) -->
+                            <div class="col-11 col-sm-6 col-lg-6">
+                                <div class="hero-mini-card border-0 d-flex align-items-center gap-3" style="background-color: #0f382a; color: #ffffff;">
+                                    <img src="assets/dish-noodles.jpg" alt="Veg Noodles" class="rounded-circle shadow-sm flex-shrink-0" style="width: 54px; height: 54px; object-fit: cover;">
+                                    <div class="flex-grow-1 min-w-0 text-start">
+                                        <h6 class="fw-bold mb-0 text-truncate text-white">Veg Noodles</h6>
+                                        <small class="text-white-50 d-block text-truncate" style="font-size: 11px;">Fresh veggies, great taste, perfect for your day!</small>
+                                        <div class="d-flex align-items-center justify-content-between mt-1">
+                                            <div class="d-flex align-items-center gap-1 text-gold" style="font-size: 11px;">
+                                                <i class="bi bi-star-fill"></i>
+                                                <span class="fw-bold text-white">4.3</span>
+                                                <span class="text-white-50">(90+)</span>
+                                            </div>
+                                            <div class="fw-bold text-white fs-6">₹85</div>
+                                        </div>
+                                    </div>
+                                    <a href="login.html" class="popular-cart-btn text-decoration-none shadow-sm" title="Add to order">
+                                        <i class="bi bi-cart-fill fs-6"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Visual Platter -->
+                    <div class="col-lg-6 position-relative text-center">
+                        <!-- Floating Order Confirmed Badge -->
+                        <div class="order-confirmed-pill">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                                <i class="bi bi-patch-check-fill fs-6"></i>
+                            </div>
+                            <div class="text-start lh-1">
+                                <div class="fw-bold text-dark fs-xs">Order confirmed!</div>
+                                <small class="text-muted fs-xxs">Chicken Biryani &bull; ₹85</small>
+                            </div>
+                        </div>
+
+                        <!-- Main Round Appetizing Food Platter -->
+                        <img src="assets/hero-food-platter.jpg" alt="Campus Canteen Gourmet Food Platter" class="hero-platter-img img-fluid">
+
+                        <!-- Handwritten Note with Doodle Arrow -->
+                        <div class="d-none d-md-block position-absolute font-handwriting text-gold text-end" style="top: 80px; right: 20px; font-size: 1.5rem; line-height: 1.1; z-index: 5;">
+                            <div>Delicious<br>Meals<br>Everyday ♡</div>
+                            <div style="font-size: 1.8rem; transform: rotate(-25deg);">&#10549;</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular This Week Section (Exact 4 Cards from Screenshot) -->
+        <section id="popular" class="py-5 bg-white">
+            <div class="container px-lg-4">
+                <!-- Section Header -->
+                <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="text-gold fs-4"><i class="bi bi-cake2"></i></span>
+                            <h3 class="fw-bold mb-0 text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif;">Popular This Week</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Most loved by our students</p>
+                    </div>
+                    <a href="#liveMenuSection" class="text-gold fw-semibold text-decoration-none small d-flex align-items-center gap-1 mt-2 mt-md-0">
+                        <span>View Full Menu</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- 4 Popular Cards Row -->
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-lg-4 mb-4">
+                    <!-- Card 1: Chicken Biryani -->
+                    <div class="col">
+                        <div class="popular-food-card">
+                            <img src="assets/dish-biryani.jpg" alt="Chicken Biryani" class="popular-food-img mb-3">
+                            <h6 class="fw-bold mb-1 text-dark">Chicken Biryani</h6>
+                            <p class="text-muted small mb-2 flex-grow-1" style="font-size: 12px; line-height: 1.4;">Aromatic rice with spiced chicken.</p>
+                            <div class="d-flex align-items-center gap-1 text-gold mb-2" style="font-size: 12px;">
+                                <i class="bi bi-star-fill"></i>
+                                <span class="fw-bold text-dark">4.8</span>
+                                <span class="text-muted">(120+)</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <div>
+                                    <div class="fw-extrabold text-dark fs-5">₹60</div>
+                                    <span class="badge bg-success-subtle text-success fs-xxs rounded-pill">Available</span>
+                                </div>
+                                <a href="login.html" class="popular-cart-btn text-decoration-none shadow-sm" title="Order Now">
+                                    <i class="bi bi-cart-fill fs-6"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Masala Dosa -->
+                    <div class="col">
+                        <div class="popular-food-card">
+                            <img src="assets/dish-dosa.jpg" alt="Masala Dosa" class="popular-food-img mb-3">
+                            <h6 class="fw-bold mb-1 text-dark">Masala Dosa</h6>
+                            <p class="text-muted small mb-2 flex-grow-1" style="font-size: 12px; line-height: 1.4;">Crispy dosa with flavourful potato masala.</p>
+                            <div class="d-flex align-items-center gap-1 text-gold mb-2" style="font-size: 12px;">
+                                <i class="bi bi-star-fill"></i>
+                                <span class="fw-bold text-dark">4.7</span>
+                                <span class="text-muted">(98+)</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <div>
+                                    <div class="fw-extrabold text-dark fs-5">₹40</div>
+                                    <span class="badge bg-success-subtle text-success fs-xxs rounded-pill">Available</span>
+                                </div>
+                                <a href="login.html" class="popular-cart-btn text-decoration-none shadow-sm" title="Order Now">
+                                    <i class="bi bi-cart-fill fs-6"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Veg Fried Rice -->
+                    <div class="col">
+                        <div class="popular-food-card">
+                            <img src="assets/dish-fried-rice.jpg" alt="Veg Fried Rice" class="popular-food-img mb-3">
+                            <h6 class="fw-bold mb-1 text-dark">Veg Fried Rice</h6>
+                            <p class="text-muted small mb-2 flex-grow-1" style="font-size: 12px; line-height: 1.4;">Fresh veggies with perfect seasoning.</p>
+                            <div class="d-flex align-items-center gap-1 text-gold mb-2" style="font-size: 12px;">
+                                <i class="bi bi-star-fill"></i>
+                                <span class="fw-bold text-dark">4.6</span>
+                                <span class="text-muted">(86+)</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <div>
+                                    <div class="fw-extrabold text-dark fs-5">₹50</div>
+                                    <span class="badge bg-success-subtle text-success fs-xxs rounded-pill">Available</span>
+                                </div>
+                                <a href="login.html" class="popular-cart-btn text-decoration-none shadow-sm" title="Order Now">
+                                    <i class="bi bi-cart-fill fs-6"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Idli & Sambar -->
+                    <div class="col">
+                        <div class="popular-food-card">
+                            <img src="assets/dish-idli.jpg" alt="Idli & Sambar" class="popular-food-img mb-3">
+                            <h6 class="fw-bold mb-1 text-dark">Idli & Sambar</h6>
+                            <p class="text-muted small mb-2 flex-grow-1" style="font-size: 12px; line-height: 1.4;">Soft idlis with homemade sambar.</p>
+                            <div class="d-flex align-items-center gap-1 text-gold mb-2" style="font-size: 12px;">
+                                <i class="bi bi-star-fill"></i>
+                                <span class="fw-bold text-dark">4.5</span>
+                                <span class="text-muted">(75+)</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <div>
+                                    <div class="fw-extrabold text-dark fs-5">₹30</div>
+                                    <span class="badge bg-success-subtle text-success fs-xxs rounded-pill">Available</span>
+                                </div>
+                                <a href="login.html" class="popular-cart-btn text-decoration-none shadow-sm" title="Order Now">
+                                    <i class="bi bi-cart-fill fs-6"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Menu Section (Full Catalog with Live API Integration) -->
+        <section id="liveMenuSection" class="py-5 bg-body-tertiary border-top">
+            <div class="container px-lg-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
+                    <div>
+                        <div class="d-inline-flex align-items-center gap-1 px-3 py-1 rounded-pill bg-warning-subtle text-warning border border-warning-subtle mb-2 fs-xs fw-semibold">
+                            <i class="bi bi-broadcast"></i> Live Kitchen Inventory Sync
+                        </div>
+                        <h3 class="fw-bold mb-1 text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif;">Today's Full Live Menu</h3>
+                        <p class="text-muted small mb-0">Browse real-time prices, counters, and remaining unit stock.</p>
+                    </div>
+                    <!-- Category Filter Buttons -->
+                    <div class="d-flex flex-wrap gap-2" id="categoryTabs">
+                        <button class="btn btn-sm btn-gold rounded-pill px-3 cat-btn active" data-cat="ALL">All Dishes</button>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 cat-btn" data-cat="Breakfast">Breakfast</button>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 cat-btn" data-cat="Meals">Meals</button>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 cat-btn" data-cat="Snacks">Snacks</button>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 cat-btn" data-cat="Beverages">Beverages</button>
+                    </div>
+                </div>
+
+                <!-- Live Dynamic Menu Cards Grid -->
+                <div id="liveMenuContainer" class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-lg-4">
+                    <!-- Populated by script -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Value Props Bar (4 Points from Screenshot) -->
+        <section id="about" class="py-4 bg-white border-top border-bottom">
+            <div class="container px-lg-4">
+                <div class="row g-4 justify-content-between">
+                    <!-- Prop 1: Fresh Ingredients -->
+                    <div class="col-6 col-lg-3">
+                        <div class="value-prop-item">
+                            <div class="value-prop-icon">
+                                <i class="bi bi-leaf"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-sm">Fresh Ingredients</h6>
+                                <small class="text-muted fs-xs">Quality food, always.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prop 2: Quick & Easy Ordering -->
+                    <div class="col-6 col-lg-3">
+                        <div class="value-prop-item">
+                            <div class="value-prop-icon">
+                                <i class="bi bi-clock"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-sm">Quick & Easy Ordering</h6>
+                                <small class="text-muted fs-xs">Save time, order online.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prop 3: Hygienic & Safe -->
+                    <div class="col-6 col-lg-3">
+                        <div class="value-prop-item">
+                            <div class="value-prop-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-sm">Hygienic & Safe</h6>
+                                <small class="text-muted fs-xs">Clean kitchen, safe food.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prop 4: Affordable for Every Student -->
+                    <div class="col-6 col-lg-3">
+                        <div class="value-prop-item">
+                            <div class="value-prop-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-sm">Affordable for Every Student</h6>
+                                <small class="text-muted fs-xs">Great food, great value.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-white py-4 border-top">
+        <div class="container px-lg-4">
+            <div class="row align-items-center g-3">
+                <div class="col-md-5 text-center text-md-start">
+                    <div class="d-flex align-items-center gap-2 justify-content-center justify-content-md-start">
+                        <i class="bi bi-egg-fried text-gold fs-5"></i>
+                        <span class="fw-bold text-dark">CampusCanteen</span>
+                    </div>
+                    <small class="text-muted d-block mt-1">Smart Canteen Management System &bull; Fast, contactless student dining.</small>
+                </div>
+                <div class="col-md-7 text-center text-md-end">
+                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-end small">
+                        <a href="login.html" class="text-secondary text-decoration-none">Student Sign In</a>
+                        <span>&bull;</span>
+                        <a href="register.html" class="text-secondary text-decoration-none">Student Register</a>
+                        <span>&bull;</span>
+                        <a href="login.html?demo=staff" class="text-secondary text-decoration-none">Staff Portal</a>
+                        <span>&bull;</span>
+                        <a href="login.html?demo=manager" class="text-secondary text-decoration-none">Management</a>
+                        <span>&bull;</span>
+                        <a href="http://localhost:8080/swagger-ui.html" target="_blank" class="text-secondary text-decoration-none">API Docs</a>
+                    </div>
+                    <small class="text-muted d-block mt-2">&copy; 2026 CampusCanteen. All rights reserved.</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- App Logic & Menu Loader -->
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from './js/config.js';
+        import { ApiService } from './js/api.js';
+        import { UI } from './js/ui.js';
+        import { ChatbotWidget } from './js/chatbot.js';
+
+        // 1. Initialize UI Theme & Chatbot
+        UI.initTheme();
+        if (typeof ChatbotWidget !== 'undefined' && ChatbotWidget.init) {
+            ChatbotWidget.init();
+        }
+
+        // 2. High-quality Food Image Mapping for Authentic Dish Rendering
+        const FOOD_IMAGES = {
+            'biryani': 'assets/dish-biryani.jpg',
+            'dosa': 'assets/dish-dosa.jpg',
+            'noodles': 'assets/dish-noodles.jpg',
+            'rice': 'assets/dish-fried-rice.jpg',
+            'idli': 'assets/dish-idli.jpg',
+            'coffee': 'assets/dish-coffee.jpg',
+            'thali': 'assets/dish-thali.jpg',
+            'default': 'assets/hero-food-platter.jpg'
+        };
+
+        function getFoodImage(name) {
+            const n = (name || '').toLowerCase();
+            if (n.includes('biryani')) return FOOD_IMAGES.biryani;
+            if (n.includes('dosa') || n.includes('uttapam')) return FOOD_IMAGES.dosa;
+            if (n.includes('noodle') || n.includes('chowmein')) return FOOD_IMAGES.noodles;
+            if (n.includes('fried rice') || n.includes('pulao') || n.includes('rice')) return FOOD_IMAGES.rice;
+            if (n.includes('idli') || n.includes('vada') || n.includes('sambar')) return FOOD_IMAGES.idli;
+            if (n.includes('coffee') || n.includes('tea') || n.includes('chai') || n.includes('samosa') || n.includes('snack') || n.includes('soda')) return FOOD_IMAGES.coffee;
+            if (n.includes('thali') || n.includes('meal') || n.includes('paneer') || n.includes('curry') || n.includes('roti') || n.includes('lunch')) return FOOD_IMAGES.thali;
+            return FOOD_IMAGES.default;
+        }
+
+        // 3. Fallback High-Quality Dish List (Guarantees zero blank screen)
+        const FALLBACK_DISHES = [
+            { id: 1, name: "Chicken Biryani", price: 60, categoryName: "Meals", counterName: "Main Counter", veg: false, currentStock: 25, description: "Aromatic basmati rice cooked with tender spiced chicken." },
+            { id: 2, name: "Masala Dosa", price: 40, categoryName: "Breakfast", counterName: "Counter 1 - South Indian", veg: true, currentStock: 40, description: "Crispy golden crepe with seasoned potato masala and chutneys." },
+            { id: 3, name: "Veg Fried Rice", price: 50, categoryName: "Meals", counterName: "Main Counter", veg: true, currentStock: 30, description: "Wok-tossed long-grain rice with crisp farm vegetables." },
+            { id: 4, name: "Idli with Sambar & Chutney", price: 30, categoryName: "Breakfast", counterName: "Counter 1 - South Indian", veg: true, currentStock: 60, description: "Steamed fluffy rice cakes with traditional lentil stew." },
+            { id: 5, name: "Veg Hakka Noodles", price: 85, categoryName: "Snacks", counterName: "Fast Food Counter", veg: true, currentStock: 20, description: "Fresh veggies, spring onions, and wok-tossed noodles." },
+            { id: 6, name: "Filter Coffee", price: 15, categoryName: "Beverages", counterName: "Beverage Counter", veg: true, currentStock: 50, description: "Authentic hot South Indian decoction filter coffee." },
+            { id: 7, name: "Fresh Lime Soda", price: 25, categoryName: "Beverages", counterName: "Beverage Counter", veg: true, currentStock: 35, description: "Chilled fresh lime with sparkling soda and mint." },
+            { id: 8, name: "Paneer Butter Masala Combo", price: 90, categoryName: "Meals", counterName: "Main Counter", veg: true, currentStock: 18, description: "Rich cottage cheese gravy served with hot rotis." }
+        ];
+
+        let loadedItems = [];
+        let activeCategory = 'ALL';
+
+        const container = document.getElementById('liveMenuContainer');
+        const categoryTabs = document.querySelectorAll('.cat-btn');
+
+        // Render food cards into liveMenuContainer
+        function renderLiveMenu() {
+            if (!container) return;
+
+            const filtered = loadedItems.filter(item => {
+                if (activeCategory === 'ALL') return true;
+                return (item.categoryName || '').toLowerCase() === activeCategory.toLowerCase();
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5 text-muted">
+                        <i class="bi bi-search fs-3 d-block mb-2"></i>
+                        <p class="mb-0">No dishes currently available in this category.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => {
+                const img = getFoodImage(item.name);
+                const isSoldOut = (item.currentStock <= 0);
+                const isVeg = item.veg !== false;
+
+                return `
+                    <div class="col">
+                        <div class="popular-food-card ${isSoldOut ? 'opacity-75' : ''}">
+                            <div class="position-relative">
+                                <img src="${img}" alt="${item.name}" class="popular-food-img mb-3">
+                                <span class="badge ${isVeg ? 'bg-success' : 'bg-danger'} position-absolute top-0 start-0 m-2 rounded-pill fs-xxs">
+                                    ${isVeg ? 'VEG' : 'NON-VEG'}
+                                </span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-baseline mb-1">
+                                <h6 class="fw-bold mb-0 text-dark text-truncate" title="${item.name}">${item.name}</h6>
+                            </div>
+                            <small class="text-muted d-block mb-2" style="font-size: 11px;">
+                                <i class="bi bi-geo-alt text-gold me-1"></i>${item.counterName || 'Counter'}
+                            </small>
+                            <p class="text-muted small mb-2 flex-grow-1" style="font-size: 12px; line-height: 1.4;">
+                                ${item.description || 'Prepared fresh today with premium campus ingredients.'}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto">
+                                <div>
+                                    <div class="fw-extrabold text-dark fs-5">₹${Number(item.price || 0).toFixed(0)}</div>
+                                    <small class="${isSoldOut ? 'text-danger fw-bold' : 'text-success'} fs-xxs">
+                                        ${isSoldOut ? 'Sold Out' : (item.currentStock ? item.currentStock + ' units left' : 'In Stock')}
+                                    </small>
+                                </div>
+                                ${isSoldOut ? `
+                                    <button class="btn btn-sm btn-secondary rounded-pill px-3 fs-xs" disabled>Sold Out</button>
+                                ` : `
+                                    <a href="login.html" class="popular-cart-btn text-decoration-none shadow-sm" title="Sign in to order">
+                                        <i class="bi bi-cart-fill fs-6"></i>
+                                    </a>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Fetch Live Menu from Backend
+        async function fetchLiveMenu() {
+            // Render fast fallback first so user never sees a broken blank page
+            loadedItems = FALLBACK_DISHES;
+            renderLiveMenu();
+
+            try {
+                const res = await ApiService.get(ENDPOINTS.MENU_TODAY);
+                const items = Array.isArray(res) ? res : (res?.data || []);
+                if (items && items.length > 0) {
+                    loadedItems = items;
+                    renderLiveMenu();
+                }
+            } catch (err) {
+                console.warn("Backend live menu sync note:", err.message);
+                // Fallback items remain visible
+            }
+        }
+
+        // Category Tab Filter Listeners
+        categoryTabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryTabs.forEach(b => {
+                    b.classList.remove('btn-gold', 'active');
+                    b.classList.add('btn-outline-secondary');
+                });
+                btn.classList.add('btn-gold', 'active');
+                btn.classList.remove('btn-outline-secondary');
+                activeCategory = btn.dataset.cat;
+                renderLiveMenu();
+            });
+        });
+
+        // Execute immediately
+        fetchLiveMenu();
+    </script>
+</body>
+</html>

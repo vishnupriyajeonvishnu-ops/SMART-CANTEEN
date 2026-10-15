@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | CampusCanteen</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top bg-surface border-bottom shadow-sm">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                <div class="text-gold fs-4 d-flex align-items-center">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div>
+                    <div class="lh-1">
+                        <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Canteen</span>
+                    </div>
+                    <small class="text-muted d-block" style="font-size: 10px; font-weight: 500;">Student Portal</small>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#studentNav">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="studentNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="dashboard.html"><i class="bi bi-grid me-1"></i> Today's Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="orders.html"><i class="bi bi-clock-history me-1"></i> My Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="bills.html"><i class="bi bi-receipt me-1"></i> My Bills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="feedback.html"><i class="bi bi-star me-1"></i> Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold" href="profile.html"><i class="bi bi-person me-1"></i> Profile</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <button id="themeToggleBtn" class="btn btn-icon btn-outline-secondary" type="button" title="Toggle Theme">
+                        <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+                    <div class="dropdown ms-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5 text-primary"></i>
+                            <span id="navUserName" class="fw-semibold d-none d-md-inline">Student</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item text-danger" href="#" id="navLogoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container py-4" style="max-width: 800px;">
+        <!-- Portal Hero Banner with Authentic Food Platter Backdrop -->
+        <div class="portal-hero-banner mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <span class="brand-badge-golden mb-2">
+                    <i class="bi bi-egg-fried text-primary"></i> Campus Canteen Foodie Member
+                </span>
+                <h3 class="fw-bold mb-1 text-white">Student Account Profile</h3>
+                <p class="mb-0 text-white-50 fs-sm">Manage your registered details, verified academic branch, and quick food order settings.</p>
+            </div>
+            <div>
+                <img src="../assets/dish-biryani.jpg" alt="Campus Biryani" class="dish-thumb-lg rounded-circle shadow border border-3 border-white">
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-surface mb-4">
+            <div class="d-flex align-items-center gap-3 pb-3 border-bottom mb-4">
+                <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                    <i class="bi bi-person-fill fs-2"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0" id="profFullName">-</h5>
+                    <div class="text-muted fs-sm" id="profRegNo">Reg No: -</div>
+                    <span class="badge bg-success-subtle text-success fs-xs mt-1">Verified Student</span>
+                </div>
+            </div>
+
+            <form id="profileForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fs-xs fw-bold text-uppercase text-muted">Full Name</label>
+                        <input type="text" class="form-control" id="inputFullName" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fs-xs fw-bold text-uppercase text-muted">12-Digit Register Number</label>
+                        <input type="text" class="form-control font-monospace" id="inputRegNo" readonly disabled>
+                        <div class="form-text fs-xxs">Official University Register Number cannot be altered.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fs-xs fw-bold text-uppercase text-muted">Email Address</label>
+                        <input type="email" class="form-control" id="inputEmail" readonly disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fs-xs fw-bold text-uppercase text-muted">Username</label>
+                        <input type="text" class="form-control" id="inputUsername" readonly disabled>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fs-xs fw-bold text-uppercase text-muted">Contact Phone</label>
+                        <input type="tel" class="form-control" id="inputPhone" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fs-xs fw-bold text-uppercase text-muted">Department / Branch</label>
+                        <select class="form-select" id="selectCourse" required>
+                            <option value="B.E. Computer Science and Engineering">B.E. Computer Science and Engineering</option>
+                            <option value="B.Tech Artificial Intelligence and Data Science">B.Tech Artificial Intelligence and Data Science</option>
+                            <option value="B.Tech Information Technology">B.Tech Information Technology</option>
+                            <option value="B.E. Electronics and Communication">B.E. Electronics and Communication</option>
+                            <option value="B.E. Mechanical Engineering">B.E. Mechanical Engineering</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fs-xs fw-bold text-uppercase text-muted">Current Year of Study</label>
+                        <select class="form-select" id="selectYear" required>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-4 mt-3 border-top d-flex justify-content-end">
+                    <button type="submit" id="btnSaveProfile" class="btn btn-primary fw-bold px-4">
+                        <i class="bi bi-check2 me-1"></i> Save Profile Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from '../js/config.js';
+        import { ApiService } from '../js/api.js';
+        import { AuthGuard } from '../js/auth.js';
+        import { UI } from '../js/ui.js';
+        import { initChatbot } from '../js/chatbot.js';
+
+        const currentUser = AuthGuard.requireRole([CONFIG.ROLES.STUDENT]);
+        if (!currentUser) throw new Error("Unauthorized");
+
+        AuthGuard.setupNavbar();
+        UI.initTheme();
+        initChatbot();
+
+        const profFullName = document.getElementById('profFullName');
+        const profRegNo = document.getElementById('profRegNo');
+        const inputFullName = document.getElementById('inputFullName');
+        const inputRegNo = document.getElementById('inputRegNo');
+        const inputEmail = document.getElementById('inputEmail');
+        const inputUsername = document.getElementById('inputUsername');
+        const inputPhone = document.getElementById('inputPhone');
+        const selectCourse = document.getElementById('selectCourse');
+        const selectYear = document.getElementById('selectYear');
+        const profileForm = document.getElementById('profileForm');
+        const btnSaveProfile = document.getElementById('btnSaveProfile');
+
+        async function loadProfile() {
+            try {
+                const res = await ApiService.get(ENDPOINTS.USERS_ME);
+                const user = res?.data || res || {};
+
+                profFullName.textContent = user.fullName || user.username;
+                profRegNo.textContent = `Reg No: ${user.registerNumber || 'Campus Student'}`;
+                inputFullName.value = user.fullName || '';
+                inputRegNo.value = user.registerNumber || '';
+                inputEmail.value = user.email || '';
+                inputUsername.value = user.username || '';
+                inputPhone.value = user.phone || '';
+                if (user.course) selectCourse.value = user.course;
+                if (user.year) selectYear.value = String(user.year);
+            } catch (err) {
+                UI.showToast(err.message, "danger");
+            }
+        }
+
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnSaveProfile.disabled = true;
+            btnSaveProfile.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Saving...`;
+
+            try {
+                const res = await ApiService.put(ENDPOINTS.USERS_ME, {
+                    fullName: inputFullName.value.trim(),
+                    phone: inputPhone.value.trim(),
+                    course: selectCourse.value,
+                    year: Number(selectYear.value)
+                });
+
+                if (res.success) {
+                    UI.showToast("Profile updated successfully!", "success");
+                    // Update stored user
+                    const updated = res.data;
+                    ApiService.saveSession(ApiService.getToken(), updated);
+                    AuthGuard.setupNavbar();
+                    profFullName.textContent = updated.fullName;
+                } else {
+                    throw new Error(res.message || "Failed to update profile");
+                }
+            } catch (err) {
+                UI.showToast(err.message, "danger");
+            } finally {
+                btnSaveProfile.disabled = false;
+                btnSaveProfile.innerHTML = `<i class="bi bi-check2 me-1"></i> Save Profile Changes`;
+            }
+        });
+
+        loadProfile();
+    </script>
+</body>
+</html>

@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dishes & Food Management | CampusCanteen</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .dish-thumb-preview {
+            width: 58px;
+            height: 58px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #f1f3f5;
+        }
+        .preset-photo-card {
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 4px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .preset-photo-card:hover {
+            transform: translateY(-2px);
+            border-color: #f59e0b;
+        }
+        .preset-photo-card.selected {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        .preset-photo-card .selected-check {
+            display: none;
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #10b981;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            align-items: center;
+            justify-content: center;
+        }
+        .preset-photo-card.selected .selected-check {
+            display: flex;
+        }
+        .preset-photo-img {
+            width: 100%;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .upload-dropzone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-align: center;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .upload-dropzone:hover {
+            border-color: #f59e0b;
+            background: #fffdf5;
+        }
+        [data-bs-theme="dark"] .upload-dropzone {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        [data-bs-theme="dark"] .upload-dropzone:hover {
+            border-color: #f59e0b;
+            background: #232f45;
+        }
+    </style>
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top bg-surface border-bottom shadow-sm">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                <div class="text-gold fs-4 d-flex align-items-center">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div>
+                    <div class="lh-1">
+                        <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Canteen</span>
+                    </div>
+                    <small class="text-muted d-block" style="font-size: 10px; font-weight: 500;">Staff Counter Portal</small>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#staffNav">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="staffNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="dashboard.html"><i class="bi bi-kanban me-1"></i> Order Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="payments.html"><i class="bi bi-credit-card-2-front me-1"></i> Payment Queue</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="inventory.html"><i class="bi bi-box-seam me-1"></i> Inventory Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="menu-management.html"><i class="bi bi-calendar2-check me-1"></i> Today's Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold" href="food-management.html"><i class="bi bi-egg-fried me-1"></i> Dishes & Counters</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="bills.html"><i class="bi bi-receipt me-1"></i> Bills Lookup</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="feedback.html"><i class="bi bi-star me-1"></i> Feedback</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <button id="themeToggleBtn" class="btn btn-icon btn-outline-secondary" type="button" title="Toggle Theme">
+                        <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+                    <div class="dropdown ms-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-badge-fill fs-5 text-warning"></i>
+                            <span id="navUserName" class="fw-semibold d-none d-md-inline">Staff Operator</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item text-danger" href="#" id="navLogoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container-fluid px-lg-4 py-4" style="max-width: 1250px;">
+        <!-- Header & Action Row -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div>
+                <h3 class="fw-bold mb-1">Canteen Food & Dishes Catalog</h3>
+                <p class="text-muted fs-sm mb-0">Add, edit, manage pricing, upload compressed fast-loading food photos, and control dish availability.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-semibold" id="btnRefreshDishes">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+                </button>
+                <button class="btn btn-primary btn-sm rounded-pill px-3 fw-bold shadow-sm" id="btnOpenAddModal">
+                    <i class="bi bi-plus-lg me-1"></i> Add Food Item
+                </button>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-surface">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-xs fw-bold text-uppercase">Total Dishes</span>
+                            <h3 class="fw-extrabold mb-0 mt-1" id="statTotalDishes">0</h3>
+                        </div>
+                        <div class="rounded-circle p-3 bg-primary-subtle text-primary fs-4">
+                            <i class="bi bi-egg-fried"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-surface">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-xs fw-bold text-uppercase">Active Dishes</span>
+                            <h3 class="fw-extrabold text-success mb-0 mt-1" id="statActiveDishes">0</h3>
+                        </div>
+                        <div class="rounded-circle p-3 bg-success-subtle text-success fs-4">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-surface">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-xs fw-bold text-uppercase">Low Stock Alert</span>
+                            <h3 class="fw-extrabold text-danger mb-0 mt-1" id="statLowStock">0</h3>
+                        </div>
+                        <div class="rounded-circle p-3 bg-danger-subtle text-danger fs-4">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-surface">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-xs fw-bold text-uppercase">Fast Image Cache</span>
+                            <h3 class="fw-extrabold text-gold mb-0 mt-1">100%</h3>
+                        </div>
+                        <div class="rounded-circle p-3 bg-warning-subtle text-warning fs-4">
+                            <i class="bi bi-lightning-charge-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter & Search Controls -->
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-surface">
+            <div class="row g-2 align-items-center">
+                <div class="col-12 col-md-4">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" id="foodSearchInput" class="form-control border-start-0 ps-0" placeholder="Search dishes (e.g., Dosa, Biryani, Coffee)...">
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <select class="form-select form-select-sm" id="categoryFilter">
+                        <option value="ALL">All Categories</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-3">
+                    <select class="form-select form-select-sm" id="dietaryFilter">
+                        <option value="ALL">All Diet (Veg & Non-Veg)</option>
+                        <option value="VEG">Vegetarian Only</option>
+                        <option value="NON_VEG">Non-Vegetarian Only</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-2">
+                    <select class="form-select form-select-sm" id="statusFilter">
+                        <option value="ALL">All Status</option>
+                        <option value="ACTIVE" selected>Active Only</option>
+                        <option value="INACTIVE">Deactivated Only</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Items Table -->
+        <div class="card border-0 shadow-sm rounded-4 bg-surface overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light fs-xs text-uppercase text-muted">
+                        <tr>
+                            <th class="ps-4">Dish Details & Photo</th>
+                            <th>Category</th>
+                            <th>Counter</th>
+                            <th>Dietary</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="foodTableBody">
+                        <tr><td colspan="8" class="text-center py-5 text-muted">Loading canteen dishes...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Universal Add / Edit Food Modal -->
+    <div class="modal fade" id="foodModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom p-3">
+                    <h5 class="modal-title fw-bold" id="foodModalTitle">
+                        <i class="bi bi-egg-fried text-gold me-2"></i>Add New Canteen Dish
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="foodForm">
+                    <input type="hidden" id="modalFoodId" value="">
+                    <div class="modal-body p-4">
+                        <!-- Basic Details Row -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-7">
+                                <label class="form-label fs-xs fw-bold text-uppercase text-muted">Dish Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="formFoodName" placeholder="e.g. Ghee Masala Dosa" required>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label fs-xs fw-bold text-uppercase text-muted">Dietary Classification</label>
+                                <div class="form-check form-switch pt-2">
+                                    <input class="form-check-input cursor-pointer" type="checkbox" id="formFoodVeg" checked>
+                                    <label class="form-check-label fw-semibold text-success fs-sm" for="formFoodVeg" id="labelFoodVeg">
+                                        <i class="bi bi-circle-fill fs-xs me-1"></i>Vegetarian Dish
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category & Counter Selection -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fs-xs fw-bold text-uppercase text-muted">Food Category <span class="text-danger">*</span></label>
+                                <select class="form-select" id="formFoodCategory" required>
+                                    <option value="1">Breakfast</option>
+                                    <option value="2">Lunch & Meals</option>
+                                    <option value="3">Evening Snacks</option>
+                                    <option value="4">Beverages & Drinks</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fs-xs fw-bold text-uppercase text-muted">Assigned Collection Counter <span class="text-danger">*</span></label>
+                                <select class="form-select" id="formFoodCounter" required>
+                                    <option value="1">Food Counter (FC-01)</option>
+                                    <option value="2">Tea/Coffee Counter (TC-01)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Price and Stock -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fs-xs fw-bold text-uppercase text-muted">Unit Price (₹) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text fw-bold">₹</span>
+                                    <input type="number" step="0.50" min="1" class="form-control" id="formFoodPrice" placeholder="50.00" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fs-xs fw-bold text-uppercase text-muted">Stock Quantity (Units) <span class="text-danger">*</span></label>
+                                <input type="number" min="0" class="form-control" id="formFoodStock" value="50" required>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label class="form-label fs-xs fw-bold text-uppercase text-muted">Description / Ingredients</label>
+                            <textarea class="form-control" id="formFoodDesc" rows="2" placeholder="Serving details, ingredients or spice level..."></textarea>
+                        </div>
+
+                        <!-- Photo & Image Optimization Section -->
+                        <div class="card border bg-light-subtle rounded-4 p-3 mb-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fs-xs fw-bold text-uppercase text-dark mb-0">
+                                    <i class="bi bi-camera-fill text-gold me-1"></i>Dish Food Photo & Instant Load Optimizer
+                                </label>
+                                <span class="badge bg-success-subtle text-success fs-xxs fw-semibold" id="photoSpeedBadge">
+                                    <i class="bi bi-lightning-fill"></i> Instant Load Optimized (<40KB)
+                                </span>
+                            </div>
+
+                            <!-- Photo Mode Navigation Tabs -->
+                            <ul class="nav nav-pills nav-fill mb-3 bg-surface p-1 rounded-3 border" id="photoTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active py-1 fs-xs fw-bold" id="tabPresetBtn" data-bs-toggle="pill" data-bs-target="#tabPreset" type="button" role="tab">
+                                        <i class="bi bi-grid-fill me-1"></i> Choose from Preset Menu Photos
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link py-1 fs-xs fw-bold" id="tabUploadBtn" data-bs-toggle="pill" data-bs-target="#tabUpload" type="button" role="tab">
+                                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload Custom Photo (Auto-Compressed)
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link py-1 fs-xs fw-bold" id="tabUrlBtn" data-bs-toggle="pill" data-bs-target="#tabUrl" type="button" role="tab">
+                                        <i class="bi bi-link-45deg me-1"></i> Image URL
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="photoTabsContent">
+                                <!-- Tab 1: Preset Food Gallery -->
+                                <div class="tab-pane fade show active" id="tabPreset" role="tabpanel">
+                                    <p class="fs-xs text-muted mb-2">Click any authentic canteen dish photo below to assign it with zero loading delay:</p>
+                                    <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 g-2" id="presetPhotosContainer" style="max-height: 220px; overflow-y: auto;">
+                                        <!-- Preset photos injected here -->
+                                    </div>
+                                </div>
+
+                                <!-- Tab 2: Custom Upload with Auto Canvas Compression -->
+                                <div class="tab-pane fade" id="tabUpload" role="tabpanel">
+                                    <div class="upload-dropzone" id="uploadDropzone">
+                                        <i class="bi bi-cloud-arrow-up text-gold fs-1 d-block mb-1"></i>
+                                        <span class="fw-bold fs-sm d-block">Click to select photo or drag & drop</span>
+                                        <small class="text-muted fs-xs">Automatic client-side compression resizes 5MB+ photos down to ~30KB WebP for blazing speed</small>
+                                        <input type="file" id="fileUploadInput" accept="image/*" class="d-none">
+                                    </div>
+                                    <div id="uploadFeedback" class="mt-2 fs-xs text-success fw-semibold d-none">
+                                        <i class="bi bi-check-circle-fill me-1"></i>
+                                        <span id="uploadFeedbackText"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Tab 3: Custom Image URL -->
+                                <div class="tab-pane fade" id="tabUrl" role="tabpanel">
+                                    <input type="text" class="form-control form-control-sm" id="formFoodImageUrl" placeholder="Enter relative path (e.g. assets/dishes/dosa.jpg) or full URL">
+                                </div>
+                            </div>
+
+                            <!-- Active Photo Preview Window -->
+                            <div class="d-flex align-items-center gap-3 mt-3 pt-3 border-top">
+                                <div class="position-relative">
+                                    <img id="activePhotoPreview" src="../assets/hero-food-platter.jpg" alt="Preview" class="dish-thumb-preview border shadow-sm" loading="lazy" decoding="async">
+                                </div>
+                                <div class="lh-sm">
+                                    <small class="text-muted fs-xxs d-block fw-bold text-uppercase">Currently Selected Photo Path</small>
+                                    <span class="fs-xs fw-semibold font-monospace text-break" id="previewPathText">assets/hero-food-platter.jpg</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top p-3 bg-surface">
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm" id="btnSaveFoodItem">
+                            <i class="bi bi-check-lg me-1"></i> Save Dish
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from '../js/config.js';
+        import { ApiService } from '../js/api.js';
+        import { AuthGuard } from '../js/auth.js';
+        import { UI } from '../js/ui.js';
+        import { initChatbot } from '../js/chatbot.js';
+        import { PRESET_FOOD_PHOTOS, getFoodImage, compressImageFile } from '../js/food-images.js';
+
+        // 1. Enforce Staff/Manager authorization
+        const currentUser = AuthGuard.requireRole([CONFIG.ROLES.STAFF, CONFIG.ROLES.MANAGER]);
+        if (!currentUser) throw new Error("Unauthorized");
+
+        AuthGuard.setupNavbar();
+        UI.initTheme();
+        initChatbot();
+
+        // State variables
+        let foodItems = [];
+        let categories = [];
+        let counters = [];
+        let selectedImageUrl = 'assets/hero-food-platter.jpg';
+
+        // DOM Elements
+        const foodTableBody = document.getElementById('foodTableBody');
+        const foodSearchInput = document.getElementById('foodSearchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const dietaryFilter = document.getElementById('dietaryFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        const btnRefreshDishes = document.getElementById('btnRefreshDishes');
+        const btnOpenAddModal = document.getElementById('btnOpenAddModal');
+        const foodModal = new bootstrap.Modal(document.getElementById('foodModal'));
+        const foodForm = document.getElementById('foodForm');
+        const foodModalTitle = document.getElementById('foodModalTitle');
+        const modalFoodId = document.getElementById('modalFoodId');
+        const formFoodName = document.getElementById('formFoodName');
+        const formFoodCategory = document.getElementById('formFoodCategory');
+        const formFoodCounter = document.getElementById('formFoodCounter');
+        const formFoodPrice = document.getElementById('formFoodPrice');
+        const formFoodStock = document.getElementById('formFoodStock');
+        const formFoodDesc = document.getElementById('formFoodDesc');
+        const formFoodVeg = document.getElementById('formFoodVeg');
+        const labelFoodVeg = document.getElementById('labelFoodVeg');
+        const formFoodImageUrl = document.getElementById('formFoodImageUrl');
+        const activePhotoPreview = document.getElementById('activePhotoPreview');
+        const previewPathText = document.getElementById('previewPathText');
+        const presetPhotosContainer = document.getElementById('presetPhotosContainer');
+        const uploadDropzone = document.getElementById('uploadDropzone');
+        const fileUploadInput = document.getElementById('fileUploadInput');
+        const uploadFeedback = document.getElementById('uploadFeedback');
+        const uploadFeedbackText = document.getElementById('uploadFeedbackText');
+
+        // Stats elements
+        const statTotalDishes = document.getElementById('statTotalDishes');
+        const statActiveDishes = document.getElementById('statActiveDishes');
+        const statLowStock = document.getElementById('statLowStock');
+
+        // 2. Initialize Preset Photos Grid
+        function initPresetPhotos() {
+            presetPhotosContainer.innerHTML = PRESET_FOOD_PHOTOS.map(p => `
+                <div class="col">
+                    <div class="preset-photo-card text-center" data-path="${p.image}" data-name="${p.name}">
+                        <div class="position-relative">
+                            <img src="../${p.thumb}" alt="${p.name}" class="preset-photo-img" loading="lazy" decoding="async">
+                            <div class="selected-check"><i class="bi bi-check-lg"></i></div>
+                        </div>
+                        <small class="d-block text-truncate mt-1 fs-xxs fw-semibold">${p.name.split(' ')[0]}</small>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.preset-photo-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const path = card.dataset.path;
+                    setSelectedImage(path);
+                });
+            });
+        }
+
+        function setSelectedImage(path) {
+            selectedImageUrl = path;
+            formFoodImageUrl.value = path;
+            previewPathText.textContent = path.startsWith('data:') ? 'Custom WebP Compressed Photo (<35KB)' : path;
+            activePhotoPreview.src = path.startsWith('data:') ? path : `../${path.replace(/^\/?/, '')}`;
+
+            // Highlight preset card if matching
+            document.querySelectorAll('.preset-photo-card').forEach(c => {
+                c.classList.toggle('selected', c.dataset.path === path);
+            });
+        }
+
+        // Dietary switch text toggle
+        formFoodVeg.addEventListener('change', () => {
+            if (formFoodVeg.checked) {
+                labelFoodVeg.className = 'form-check-label fw-semibold text-success fs-sm';
+                labelFoodVeg.innerHTML = `<i class="bi bi-circle-fill fs-xs me-1"></i>Vegetarian Dish`;
+            } else {
+                labelFoodVeg.className = 'form-check-label fw-semibold text-danger fs-sm';
+                labelFoodVeg.innerHTML = `<i class="bi bi-square-fill fs-xs me-1"></i>Non-Vegetarian Dish`;
+            }
+        });
+
+        // 3. Custom Image Upload with Client-Side Canvas Compression
+        uploadDropzone.addEventListener('click', () => fileUploadInput.click());
+
+        fileUploadInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            uploadDropzone.innerHTML = `<div class="spinner-border text-primary spinner-border-sm me-2"></div>Compressing photo for zero lag...`;
+
+            try {
+                // Client-side canvas compression: transforms any 5MB-10MB photo down to ~30KB
+                const compressed = await compressImageFile(file, 450, 320, 0.82);
+
+                let uploadedUrl = null;
+                // Attempt backend upload to persist to disk
+                try {
+                    const res = await ApiService.uploadFile(ENDPOINTS.STAFF_FOOD_UPLOAD_IMAGE, compressed.blob, 'file');
+                    if (res && res.url) {
+                        uploadedUrl = res.url;
+                    }
+                } catch (uploadErr) {
+                    console.warn('Backend file save fallback to compressed data URL:', uploadErr);
+                }
+
+                const finalPath = uploadedUrl || compressed.dataUrl;
+                setSelectedImage(finalPath);
+
+                uploadFeedback.classList.remove('d-none');
+                uploadFeedbackText.textContent = `Compressed from ${(file.size / 1024).toFixed(0)} KB to ${(compressed.compressedSize / 1024).toFixed(0)} KB (${compressed.reduction}) — Loads instantly!`;
+
+                uploadDropzone.innerHTML = `
+                    <i class="bi bi-check2-circle text-success fs-2 d-block mb-1"></i>
+                    <span class="fw-bold text-success fs-sm d-block">Photo Ready & Instant-Optimized</span>
+                    <small class="text-muted fs-xs">Click again if you wish to change photo</small>
+                `;
+            } catch (err) {
+                UI.showToast(err.message, 'danger');
+                uploadDropzone.innerHTML = `
+                    <i class="bi bi-cloud-arrow-up text-gold fs-1 d-block mb-1"></i>
+                    <span class="fw-bold fs-sm d-block">Click to select photo or drag & drop</span>
+                    <small class="text-muted fs-xs">Try selecting another image file</small>
+                `;
+            }
+        });
+
+        // Manual URL input sync
+        formFoodImageUrl.addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            if (val) {
+                setSelectedImage(val);
+            }
+        });
+
+        // 4. Fetch Master Data & Food Items
+        async function loadMasterData() {
+            try {
+                const [cats, cnts] = await Promise.all([
+                    ApiService.get(ENDPOINTS.CATEGORIES),
+                    ApiService.get(ENDPOINTS.COUNTERS)
+                ]);
+
+                categories = Array.isArray(cats) ? cats : (cats?.data || []);
+                counters = Array.isArray(cnts) ? cnts : (cnts?.data || []);
+
+                // Populate Category Filter dropdown
+                categoryFilter.innerHTML = `<option value="ALL">All Categories</option>` +
+                    categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+                // Populate Form Category select
+                formFoodCategory.innerHTML = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+                // Populate Form Counter select
+                formFoodCounter.innerHTML = counters.map(c => `<option value="${c.id}">${c.name} (${c.code || ''})</option>`).join('');
+            } catch (err) {
+                console.warn("Master data load error:", err);
+            }
+        }
+
+        async function loadFoodItems() {
+            foodTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-5 text-muted"><div class="spinner-border text-primary spinner-border-sm me-2"></div>Loading canteen dishes...</td></tr>`;
+
+            try {
+                const res = await ApiService.get(ENDPOINTS.STAFF_FOOD);
+                foodItems = Array.isArray(res) ? res : (res?.data || []);
+                updateStats();
+                renderFoodTable();
+            } catch (err) {
+                foodTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-5 text-danger"><i class="bi bi-exclamation-circle me-1"></i>${err.message}</td></tr>`;
+            }
+        }
+
+        function updateStats() {
+            const total = foodItems.length;
+            const active = foodItems.filter(i => i.active).length;
+            const lowStock = foodItems.filter(i => (i.currentStock || 0) <= 10).length;
+
+            statTotalDishes.textContent = total;
+            statActiveDishes.textContent = active;
+            statLowStock.textContent = lowStock;
+        }
+
+        // 5. Render Food Table with Live Filtering
+        function renderFoodTable() {
+            const search = foodSearchInput.value.toLowerCase().trim();
+            const cat = categoryFilter.value;
+            const diet = dietaryFilter.value;
+            const status = statusFilter.value;
+
+            const filtered = foodItems.filter(item => {
+                const matchSearch = !search || item.name.toLowerCase().includes(search) || (item.description && item.description.toLowerCase().includes(search));
+                const matchCat = cat === 'ALL' || String(item.categoryId) === String(cat);
+                const matchDiet = diet === 'ALL' || (diet === 'VEG' && item.veg) || (diet === 'NON_VEG' && !item.veg);
+                const matchStatus = status === 'ALL' || (status === 'ACTIVE' && item.active) || (status === 'INACTIVE' && !item.active);
+                return matchSearch && matchCat && matchDiet && matchStatus;
+            });
+
+            if (filtered.length === 0) {
+                foodTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="bi bi-search fs-2 opacity-50 d-block mb-2"></i>
+                            <span class="fw-semibold">No food items found matching your filters.</span>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            foodTableBody.innerHTML = filtered.map(item => {
+                const imgSrc = getFoodImage(item.name, item.categoryName, '../', item.imageUrl);
+                const isVeg = item.veg !== false;
+                const stock = item.currentStock != null ? item.currentStock : 0;
+                const stockBadgeClass = stock > 15 ? 'bg-success-subtle text-success' : (stock > 0 ? 'bg-warning-subtle text-warning' : 'bg-danger text-white');
+
+                return `
+                    <tr class="${!item.active ? 'opacity-50' : ''}">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="${imgSrc}" alt="${item.name}" class="dish-thumb-preview border shadow-sm" loading="lazy" decoding="async" onerror="if(!this.dataset.fallback){ this.dataset.fallback='1'; this.src='../assets/hero-food-platter.jpg'; }">
+                                <div>
+                                    <span class="fw-bold d-block text-dark">${item.name}</span>
+                                    <small class="text-muted fs-xxs d-block" style="max-width: 280px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                                        ${item.description || 'No description provided'}
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary-subtle text-secondary fs-xs">${item.categoryName || 'General'}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border fs-xs">
+                                <i class="bi bi-shop me-1 text-gold"></i>${item.counterCode || item.counterName || 'FC-01'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge ${isVeg ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'} fs-xs">
+                                <i class="bi ${isVeg ? 'bi-circle-fill' : 'bi-square-fill'} fs-xxs me-1"></i>${isVeg ? 'VEG' : 'NON-VEG'}
+                            </span>
+                        </td>
+                        <td class="fw-bold text-primary">${UI.formatCurrency(item.price)}</td>
+                        <td>
+                            <span class="badge ${stockBadgeClass} fs-xs">
+                                ${stock} in stock
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge ${item.active ? 'bg-success' : 'bg-secondary'} fs-xs">
+                                ${item.active ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-primary btn-edit-food" data-id="${item.id}" title="Edit Dish">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button type="button" class="btn ${item.active ? 'btn-outline-warning' : 'btn-outline-success'} btn-toggle-status" data-id="${item.id}" data-active="${item.active}" title="${item.active ? 'Deactivate Dish' : 'Reactivate Dish'}">
+                                    <i class="bi ${item.active ? 'bi-pause-circle' : 'bi-play-circle'}"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-delete-food" data-id="${item.id}" title="Delete Dish">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            bindRowActions();
+        }
+
+        // 6. Action Button Bindings (Edit, Toggle Status, Delete)
+        function bindRowActions() {
+            // Edit Dish
+            document.querySelectorAll('.btn-edit-food').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    const item = foodItems.find(i => i.id === id);
+                    if (!item) return;
+                    openEditModal(item);
+                });
+            });
+
+            // Toggle Active/Inactive Status
+            document.querySelectorAll('.btn-toggle-status').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = Number(btn.dataset.id);
+                    const currentlyActive = btn.dataset.active === 'true';
+
+                    try {
+                        let res;
+                        if (currentlyActive) {
+                            res = await ApiService.delete(`${ENDPOINTS.STAFF_FOOD}/${id}`);
+                        } else {
+                            res = await ApiService.patch(ENDPOINTS.STAFF_FOOD_REACTIVATE(id), {});
+                        }
+                        UI.showToast(currentlyActive ? "Dish deactivated from menu" : "Dish reactivated on menu", "success");
+                        loadFoodItems();
+                    } catch (err) {
+                        UI.showToast(err.message, "danger");
+                    }
+                });
+            });
+
+            // Delete Dish (with soft/hard prompt)
+            document.querySelectorAll('.btn-delete-food').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = Number(btn.dataset.id);
+                    const item = foodItems.find(i => i.id === id);
+                    const name = item ? item.name : 'this item';
+
+                    if (!confirm(`Are you sure you want to delete "${name}"?\n(If past orders exist, it will be safely deactivated to preserve accounting records).`)) {
+                        return;
+                    }
+
+                    try {
+                        await ApiService.delete(`${ENDPOINTS.STAFF_FOOD}/${id}?permanent=true`);
+                        UI.showToast(`Dish removed successfully`, "info");
+                        loadFoodItems();
+                    } catch (err) {
+                        UI.showToast(err.message, "danger");
+                    }
+                });
+            });
+        }
+
+        // 7. Open Modals (Add Mode vs Edit Mode)
+        btnOpenAddModal.addEventListener('click', () => {
+            foodForm.reset();
+            modalFoodId.value = '';
+            foodModalTitle.innerHTML = `<i class="bi bi-plus-circle text-gold me-2"></i>Add New Canteen Dish`;
+            formFoodVeg.checked = true;
+            labelFoodVeg.className = 'form-check-label fw-semibold text-success fs-sm';
+            labelFoodVeg.innerHTML = `<i class="bi bi-circle-fill fs-xs me-1"></i>Vegetarian Dish`;
+            formFoodStock.value = '50';
+
+            // Default image
+            setSelectedImage('assets/dishes/dosa.jpg');
+            uploadFeedback.classList.add('d-none');
+            document.getElementById('tabPresetBtn').click();
+
+            foodModal.show();
+        });
+
+        function openEditModal(item) {
+            modalFoodId.value = item.id;
+            foodModalTitle.innerHTML = `<i class="bi bi-pencil-square text-gold me-2"></i>Edit Dish: ${item.name}`;
+            formFoodName.value = item.name;
+            formFoodCategory.value = item.categoryId;
+            formFoodCounter.value = item.counterId;
+            formFoodPrice.value = item.price;
+            formFoodStock.value = item.currentStock != null ? item.currentStock : 50;
+            formFoodDesc.value = item.description || '';
+            formFoodVeg.checked = item.veg !== false;
+
+            if (formFoodVeg.checked) {
+                labelFoodVeg.className = 'form-check-label fw-semibold text-success fs-sm';
+                labelFoodVeg.innerHTML = `<i class="bi bi-circle-fill fs-xs me-1"></i>Vegetarian Dish`;
+            } else {
+                labelFoodVeg.className = 'form-check-label fw-semibold text-danger fs-sm';
+                labelFoodVeg.innerHTML = `<i class="bi bi-square-fill fs-xs me-1"></i>Non-Vegetarian Dish`;
+            }
+
+            const currentImage = item.imageUrl || getFoodImage(item.name, item.categoryName, '', '');
+            setSelectedImage(currentImage);
+            uploadFeedback.classList.add('d-none');
+            document.getElementById('tabPresetBtn').click();
+
+            foodModal.show();
+        }
+
+        // 8. Form Submission (Create or Update)
+        foodForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveFoodItem');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span>Saving Dish...`;
+
+            const id = modalFoodId.value;
+            const payload = {
+                name: formFoodName.value.trim(),
+                categoryId: Number(formFoodCategory.value),
+                counterId: Number(formFoodCounter.value),
+                price: parseFloat(formFoodPrice.value),
+                initialStock: parseInt(formFoodStock.value, 10),
+                description: formFoodDesc.value.trim(),
+                veg: formFoodVeg.checked,
+                imageUrl: selectedImageUrl
+            };
+
+            try {
+                if (id) {
+                    // Update (PUT)
+                    await ApiService.put(`${ENDPOINTS.STAFF_FOOD}/${id}`, payload);
+                    UI.showToast(`"${payload.name}" updated successfully!`, "success");
+                } else {
+                    // Create (POST)
+                    await ApiService.post(ENDPOINTS.STAFF_FOOD, payload);
+                    UI.showToast(`"${payload.name}" added to canteen catalog & menu!`, "success");
+                }
+
+                foodModal.hide();
+                loadFoodItems();
+            } catch (err) {
+                UI.showToast(err.message, "danger");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="bi bi-check-lg me-1"></i> Save Dish`;
+            }
+        });
+
+        // 9. Event Listeners for Filters
+        foodSearchInput.addEventListener('input', renderFoodTable);
+        categoryFilter.addEventListener('change', renderFoodTable);
+        dietaryFilter.addEventListener('change', renderFoodTable);
+        statusFilter.addEventListener('change', renderFoodTable);
+        btnRefreshDishes.addEventListener('click', loadFoodItems);
+
+        // Initial Boot
+        initPresetPhotos();
+        await loadMasterData();
+        await loadFoodItems();
+    </script>
+</body>
+</html>

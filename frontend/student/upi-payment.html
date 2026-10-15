@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment | CampusCanteen</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- QRCode.js CDN for dynamic UPI QR generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg bg-surface border-bottom shadow-sm">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                <div class="text-gold fs-4 d-flex align-items-center">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div>
+                    <div class="lh-1">
+                        <span class="fw-extrabold text-dark" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Campus</span><span class="fw-extrabold text-gold" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem;">Canteen</span>
+                    </div>
+                    <small class="text-muted d-block" style="font-size: 10px; font-weight: 500;">UPI Payment Terminal</small>
+                </div>
+            </a>
+
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <button id="themeToggleBtn" class="btn btn-icon btn-outline-secondary" type="button" title="Toggle Theme">
+                    <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>
+                </button>
+                <a href="orders.html" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> My Orders
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Payment Container -->
+    <main class="container py-4" style="max-width: 900px;">
+        
+        <!-- Order Header & Expiry Countdown Alert -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-surface p-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <span class="badge bg-primary-subtle text-primary fw-bold text-uppercase px-3 py-1 rounded-pill">Awaiting UPI Payment</span>
+                    <h3 class="fw-bold mt-2 mb-0">Order #<span id="displayOrderId">...</span></h3>
+                    <small class="text-muted" id="displayOrderDate">Canteen Counter Token</small>
+                </div>
+                <div class="text-end">
+                    <small class="text-muted d-block fs-xs fw-bold text-uppercase">Payment Amount Due</small>
+                    <span class="fs-2 fw-extrabold text-primary" id="displayTotalAmount">₹0.00</span>
+                </div>
+            </div>
+
+            <!-- 10-Minute Expiry Countdown Bar -->
+            <div class="alert alert-warning border-0 d-flex align-items-center justify-content-between mt-3 mb-0 rounded-3 py-2 px-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-stopwatch-fill fs-4 text-warning"></i>
+                    <div>
+                        <span class="fw-bold fs-sm d-block">10-Minute Hold Window</span>
+                        <small class="text-muted">Stock reserved. Complete UPI payment before timer expires.</small>
+                    </div>
+                </div>
+                <div class="fs-4 fw-black font-monospace text-dark bg-white px-3 py-1 rounded-3 shadow-sm border" id="countdownTimer">
+                    10:00
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left Column: Dynamic QR Code + Fallback QR -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-surface h-100">
+                    <h5 class="fw-bold mb-1">Scan & Pay with Any UPI App</h5>
+                    <p class="text-muted fs-xs mb-3">Google Pay, PhonePe, Paytm, BHIM, Axis Mobile</p>
+
+                    <!-- Dynamic QR Code Container -->
+                    <div class="upi-qr-wrapper mx-auto p-3 bg-white rounded-4 shadow-sm border mb-3 d-flex flex-column align-items-center justify-content-center" style="width: 240px; height: 240px;">
+                        <div id="dynamicQrContainer"></div>
+                    </div>
+
+                    <!-- Direct UPI Deep Link for Mobile -->
+                    <a href="#" id="btnOpenUpiApp" class="btn btn-primary fw-bold w-100 mb-3 py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                        <i class="bi bi-phone"></i>
+                        <span>Open GPay / Any UPI App</span>
+                    </a>
+
+                    <!-- Payee details -->
+                    <div class="bg-body-tertiary p-3 rounded-3 text-start mb-3 fs-xs">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted">Payee Name:</span>
+                            <span class="fw-bold" id="displayPayeeName">Kavi</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted">VPA / UPI ID:</span>
+                            <span class="fw-bold font-monospace text-primary" id="displayUpiId">mahakavibharath02@okaxis</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Transaction Note:</span>
+                            <span class="fw-bold font-monospace" id="displayTxnNote">Order-...</span>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible Official Static QR Fallback -->
+                    <div class="accordion accordion-flush" id="accordionFallback">
+                        <div class="accordion-item bg-transparent">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed px-0 py-2 fs-xs fw-semibold text-muted bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStaticQr">
+                                    <i class="bi bi-qr-code me-2"></i> View Official Standee QR Fallback
+                                </button>
+                            </h2>
+                            <div id="collapseStaticQr" class="accordion-collapse collapse" data-bs-parent="#accordionFallback">
+                                <div class="accordion-body px-0 pt-2 text-center">
+                                    <p class="fs-xs text-muted mb-2">Scan directly if your camera has difficulty with the dynamic code:</p>
+                                    <img src="../assets/upi-qr.png" alt="Campus Canteen Official UPI QR" class="img-fluid rounded-4 shadow-sm border" style="max-height: 260px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Column: 12-Digit UTR Input Form & Status Tracker -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-surface h-100 d-flex flex-column">
+                    <h5 class="fw-bold mb-1">Submit 12-Digit UTR Reference</h5>
+                    <p class="text-muted fs-xs mb-3">After making the UPI transfer in your banking/GPay app, copy the 12-digit UTR / UPI Ref ID from the receipt and submit it below.</p>
+
+                    <form id="utrSubmissionForm">
+                        <div class="mb-3">
+                            <label for="utrNumberInput" class="form-label fs-xs fw-bold text-uppercase text-muted">12-Digit UPI Transaction ID / UTR</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent text-primary"><i class="bi bi-hash"></i></span>
+                                <input 
+                                    type="text" 
+                                    class="form-control form-control-lg font-monospace fw-bold" 
+                                    id="utrNumberInput" 
+                                    placeholder="e.g. 428910482910" 
+                                    maxlength="12" 
+                                    pattern="\d{12}" 
+                                    required
+                                    autocomplete="off">
+                            </div>
+                            <div class="form-text fs-xs">Must be exactly 12 numeric digits from your GPay/PhonePe success screen.</div>
+                        </div>
+
+                        <button type="submit" id="btnSubmitUtr" class="btn btn-success fw-bold w-100 py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm mb-3">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>Submit UTR for Verification</span>
+                        </button>
+                    </form>
+
+                    <!-- Real-Time Verification Status Box -->
+                    <div class="card border-0 bg-body-tertiary p-3 rounded-3 mb-3" id="verificationStatusBox">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="spinner-grow spinner-grow-sm text-primary" role="status" id="statusSpinner"></span>
+                            <span class="fw-bold fs-sm" id="statusTitle">Awaiting UTR Submission</span>
+                        </div>
+                        <p class="fs-xs text-muted mb-0" id="statusMessage">
+                            Once submitted, canteen staff will check the counter register or bank notification and mark your order as confirmed.
+                        </p>
+                    </div>
+
+                    <!-- Transparent Academic Note per project specifications -->
+                    <div class="alert alert-info border-0 rounded-3 p-3 fs-xs mb-0 mt-auto">
+                        <div class="d-flex gap-2">
+                            <i class="bi bi-info-circle-fill fs-5 text-info flex-shrink-0"></i>
+                            <div>
+                                <span class="fw-bold d-block mb-1">Canteen Payment Policy</span>
+                                Per project specification, UPI payments undergo manual verification by staff counter operators. No UPI PIN or bank credentials are ever stored. Client-side payment flags are never trusted.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Payment Verified Success Modal -->
+    <div class="modal fade" id="paymentSuccessModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 text-center p-4">
+                <div class="rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                    <i class="bi bi-check-lg display-4"></i>
+                </div>
+                <h4 class="fw-bold text-success mb-1">Payment Verified!</h4>
+                <p class="text-muted mb-3 fs-sm">Your order has been confirmed by canteen staff. Hot preparation has begun.</p>
+                <div class="card bg-body-tertiary border-0 p-3 rounded-3 mb-3 text-start fs-sm">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Order ID:</span>
+                        <span class="fw-bold" id="modalOrderId">-</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Status:</span>
+                        <span class="badge bg-success">CONFIRMED</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Collection Counter:</span>
+                        <span class="fw-bold text-primary" id="modalCounter">-</span>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <a href="orders.html" class="btn btn-primary fw-bold py-2">
+                        <i class="bi bi-clock-history me-1"></i> Track Live Order Status
+                    </a>
+                    <a href="bills.html" class="btn btn-outline-secondary fw-semibold">
+                        <i class="bi bi-receipt me-1"></i> View & Print Bill
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { CONFIG, ENDPOINTS } from '../js/config.js';
+        import { ApiService } from '../js/api.js';
+        import { AuthGuard } from '../js/auth.js';
+        import { UI } from '../js/ui.js';
+
+        // Enforce student role
+        const currentUser = AuthGuard.requireRole([CONFIG.ROLES.STUDENT]);
+        if (!currentUser) throw new Error("Unauthorized");
+        UI.initTheme();
+
+        // Parse query params
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');
+
+        if (!orderId) {
+            UI.showToast("No order ID specified", "danger");
+            setTimeout(() => window.location.href = 'dashboard.html', 1500);
+            throw new Error("Missing orderId");
+        }
+
+        // Elements
+        const displayOrderId = document.getElementById('displayOrderId');
+        const displayTotalAmount = document.getElementById('displayTotalAmount');
+        const displayOrderDate = document.getElementById('displayOrderDate');
+        const countdownTimer = document.getElementById('countdownTimer');
+        const dynamicQrContainer = document.getElementById('dynamicQrContainer');
+        const btnOpenUpiApp = document.getElementById('btnOpenUpiApp');
+        const displayPayeeName = document.getElementById('displayPayeeName');
+        const displayUpiId = document.getElementById('displayUpiId');
+        const displayTxnNote = document.getElementById('displayTxnNote');
+        const utrNumberInput = document.getElementById('utrNumberInput');
+        const utrSubmissionForm = document.getElementById('utrSubmissionForm');
+        const btnSubmitUtr = document.getElementById('btnSubmitUtr');
+        const statusSpinner = document.getElementById('statusSpinner');
+        const statusTitle = document.getElementById('statusTitle');
+        const statusMessage = document.getElementById('statusMessage');
+
+        displayOrderId.textContent = orderId;
+
+        let pollingInterval = null;
+        let countdownInterval = null;
+        let orderData = null;
+
+        // 1. Fetch UPI configuration and order details
+        async function initPayment() {
+            try {
+                // Fetch UPI config and order info
+                const [upiRes, orderRes] = await Promise.all([
+                    ApiService.get(ENDPOINTS.STUDENT_UPI_CONFIG),
+                    ApiService.get(`${ENDPOINTS.STUDENT_ORDERS}/${orderId}`)
+                ]);
+
+                const upiConfig = (upiRes?.data || upiRes) || { upiId: 'mahakavibharath02@okaxis', payeeName: 'Kavi' };
+                orderData = orderRes?.data || orderRes;
+
+                if (!orderData) {
+                    throw new Error("Unable to retrieve order details for ID: " + orderId);
+                }
+
+                const resolvedOrderId = orderData.orderNumber || orderData.id || orderId;
+                displayOrderId.textContent = resolvedOrderId;
+                displayPayeeName.textContent = upiConfig.payeeName || 'Campus Canteen';
+                displayUpiId.textContent = upiConfig.upiId || 'canteen@upi';
+                displayTxnNote.textContent = `Order-${orderData.orderNumber || orderData.id || orderId}`;
+                displayTotalAmount.textContent = UI.formatCurrency(orderData.totalAmount || 0);
+                displayOrderDate.textContent = `Placed on ${UI.formatDate(orderData.orderDate || orderData.createdAt || new Date())}`;
+
+                // Generate dynamic UPI URI
+                // Format: upi://pay?pa=<upi.id>&pn=<payee>&am=<total>&cu=INR&tn=Order-<orderId>
+                const amountFormatted = Number(orderData.totalAmount || 0).toFixed(2);
+                const upiUri = `upi://pay?pa=${encodeURIComponent(upiConfig.upiId)}&pn=${encodeURIComponent(upiConfig.payeeName)}&am=${amountFormatted}&cu=INR&tn=Order-${orderData.id || resolvedOrderId}`;
+
+                // Set mobile deep link
+                btnOpenUpiApp.href = upiUri;
+
+                // Render dynamic QR code via qrcode.js
+                dynamicQrContainer.innerHTML = '';
+                new QRCode(dynamicQrContainer, {
+                    text: upiUri,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#1e1b4b",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+
+                // Start 10-minute countdown based on order creation time
+                startCountdown(orderData.orderDate || orderData.createdAt);
+
+                // Check existing payment status
+                if (orderData.paymentStatus === 'SUCCESS' || orderData.paymentStatus === 'VERIFIED') {
+                    showPaymentSuccess(orderData);
+                } else if (orderData.paymentStatus === 'PENDING' && orderData.utrNumber) {
+                    utrNumberInput.value = orderData.utrNumber;
+                    utrNumberInput.disabled = true;
+                    btnSubmitUtr.disabled = true;
+                    btnSubmitUtr.innerHTML = `<i class="bi bi-clock-history me-1"></i> UTR Submitted - Verification In Progress`;
+                    statusTitle.textContent = "UTR Submitted - Awaiting Staff Approval";
+                    statusMessage.textContent = `Submitted UTR: ${orderData.utrNumber}. Canteen staff is verifying payment against counter register.`;
+                    startPolling();
+                }
+
+            } catch (err) {
+                UI.showToast(err.message, "danger");
+            }
+        }
+
+        // 2. Countdown Timer (10 minutes from order placement)
+        function startCountdown(orderDateStr) {
+            const orderTime = new Date(orderDateStr).getTime();
+            const expiryTime = orderTime + (10 * 60 * 1000); // 10 minutes
+
+            countdownInterval = setInterval(() => {
+                const now = Date.now();
+                const remaining = expiryTime - now;
+
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownTimer.textContent = "00:00";
+                    countdownTimer.classList.add('text-danger');
+                    statusTitle.textContent = "Order Expired";
+                    statusSpinner.className = "bi bi-x-circle-fill text-danger fs-5";
+                    statusMessage.textContent = "Payment window expired. Reserved stock has been automatically released back to the canteen.";
+                    btnSubmitUtr.disabled = true;
+                    utrNumberInput.disabled = true;
+                    UI.showToast("Order expired due to non-payment. Please re-order.", "warning");
+                    return;
+                }
+
+                const mins = Math.floor(remaining / 60000);
+                const secs = Math.floor((remaining % 60000) / 1000);
+                countdownTimer.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // 3. Handle UTR Submission
+        utrSubmissionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const utr = utrNumberInput.value.trim();
+
+            if (!/^\d{12}$/.test(utr)) {
+                UI.showToast("Please enter a valid 12-digit numeric UTR number", "warning");
+                return;
+            }
+
+            btnSubmitUtr.disabled = true;
+            btnSubmitUtr.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Submitting UTR...`;
+
+            try {
+                const res = await ApiService.post(ENDPOINTS.STUDENT_PAYMENT_UTR, {
+                    orderId: Number(orderId),
+                    utrNumber: utr
+                });
+
+                if (res.success) {
+                    UI.showToast("Payment submitted successfully! Order placed.", "success");
+                    utrNumberInput.disabled = true;
+                    btnSubmitUtr.disabled = true;
+                    btnSubmitUtr.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> Order Placed & Submitted`;
+
+                    // Show success modal and automatically advance to next process
+                    showOrderPlacedSuccess(orderData, utr);
+                    startPolling();
+                } else {
+                    throw new Error(res.message || "Failed to submit UTR");
+                }
+            } catch (err) {
+                UI.showToast(err.message, "danger");
+                btnSubmitUtr.disabled = false;
+                btnSubmitUtr.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> Submit UTR for Verification`;
+            }
+        });
+
+        // 4. Polling for Staff Verification
+        function startPolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+            pollingInterval = setInterval(async () => {
+                try {
+                    const res = await ApiService.get(`${ENDPOINTS.STUDENT_ORDERS}/${orderId}`);
+                    const order = res.data;
+                    if (order.paymentStatus === 'SUCCESS' || order.paymentStatus === 'VERIFIED') {
+                        clearInterval(pollingInterval);
+                        if (countdownInterval) clearInterval(countdownInterval);
+                        showPaymentSuccess(order);
+                    } else if (order.paymentStatus === 'FAILED' || order.status === 'CANCELLED') {
+                        clearInterval(pollingInterval);
+                        if (countdownInterval) clearInterval(countdownInterval);
+                        statusTitle.textContent = "Payment Rejected / Cancelled";
+                        statusSpinner.className = "bi bi-x-circle-fill text-danger fs-5";
+                        statusMessage.textContent = "Your payment reference was rejected or order was cancelled. Please contact staff.";
+                    }
+                } catch (e) {
+                    console.log('Polling check:', e.message);
+                }
+            }, 3000);
+        }
+
+        // 5. Order Placed Successfully Modal (Immediate next process after payment)
+        function showOrderPlacedSuccess(order, utrCode) {
+            const resolvedId = order?.orderNumber || order?.id || orderId;
+            statusTitle.textContent = "Order Placed Successfully!";
+            statusSpinner.className = "bi bi-check-circle-fill text-success fs-5";
+            statusMessage.textContent = "Your order and bill have been sent to Staff Billing for counter verification.";
+
+            document.getElementById('modalOrderId').textContent = '#' + resolvedId;
+            const counters = (order?.items || []).map(i => i.counterName).filter((v, i, a) => a.indexOf(v) === i);
+            document.getElementById('modalCounter').textContent = counters.join(', ') || 'Food Counter (FC-01)';
+
+            const modalTitle = document.querySelector('#paymentSuccessModal h4');
+            const modalDesc = document.querySelector('#paymentSuccessModal p.text-muted');
+            if (modalTitle) modalTitle.textContent = "Order Placed Successfully!";
+            if (modalDesc) modalDesc.textContent = "Your order and bill have been sent directly to Canteen Staff Billing for counter verification.";
+
+            const statusBadge = document.querySelector('#paymentSuccessModal .badge');
+            if (statusBadge) {
+                statusBadge.className = 'badge bg-primary';
+                statusBadge.textContent = 'SENT TO STAFF BILLING';
+            }
+
+            const modalEl = document.getElementById('paymentSuccessModal');
+            const bsModal = new bootstrap.Modal(modalEl);
+            bsModal.show();
+
+            // Auto-advance redirect to orders page after 3.5 seconds
+            setTimeout(() => {
+                window.location.href = `orders.html?orderId=${resolvedId}&success=true`;
+            }, 3500);
+        }
+
+        // 6. Payment Verified Modal
+        function showPaymentSuccess(order) {
+            const resolvedId = order?.orderNumber || order?.id || orderId;
+            statusTitle.textContent = "Payment Verified & Order Confirmed!";
+            statusSpinner.className = "bi bi-check-circle-fill text-success fs-5";
+            statusMessage.textContent = "Payment confirmed. Your bill has been generated and canteen kitchen has received your order.";
+
+            document.getElementById('modalOrderId').textContent = '#' + resolvedId;
+            const counters = (order.items || []).map(i => i.counterName).filter((v, i, a) => a.indexOf(v) === i);
+            document.getElementById('modalCounter').textContent = counters.join(', ') || 'Food Counter (FC-01)';
+
+            const modalTitle = document.querySelector('#paymentSuccessModal h4');
+            const modalDesc = document.querySelector('#paymentSuccessModal p.text-muted');
+            if (modalTitle) modalTitle.textContent = "Payment Verified!";
+            if (modalDesc) modalDesc.textContent = "Your order has been confirmed by canteen staff. Hot preparation has begun.";
+
+            const statusBadge = document.querySelector('#paymentSuccessModal .badge');
+            if (statusBadge) {
+                statusBadge.className = 'badge bg-success';
+                statusBadge.textContent = 'CONFIRMED';
+            }
+
+            const modalEl = document.getElementById('paymentSuccessModal');
+            const bsModal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            bsModal.show();
+        }
+
+        initPayment();
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# Maven build artifacts
+target/
+**/target/
+*.class
+**/*.class
+*.jar
+*.war
+
+# Logs
+*.log
+**/*.log
+
+# Scratch scripts & temporary files
+scratch/
+**/scratch/
+temp_repo/
+*.tmp
+*.bak
+
+# Redundant nested extraction folder
+smart canteen management/
+
+# IDE & OS files
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
